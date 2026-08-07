@@ -1,10 +1,6 @@
 import React, {useState} from "react";
 import {motion, AnimatePresence} from "framer-motion";
-import {
-  ChevronDown,
-  X,
-  Sparkles
-} from "lucide-react";
+import {ChevronDown, X, Sparkles} from "lucide-react";
 
 export const Hero: React.FC = () => {
   const [activeTab, setActiveTab] = useState("Home");
@@ -32,13 +28,14 @@ export const Hero: React.FC = () => {
   ];
 
   return (<section className="relative w-full max-w-full min-h-[640px] sm:min-h-[720px] lg:min-h-[780px] bg-[#FAF3EA] text-[#3D1E16] overflow-hidden flex flex-col justify-between select-none">
-    {/* BACKGROUND IMAGE WITH MILK SPLASH & CUPCAKE */}
-    <div className="absolute inset-0 bg-cover bg-right md:bg-center bg-no-repeat pointer-events-none z-0 opacity-95 transition-all duration-700" style={{
-        backgroundImage: `url('/assets/cake.jpg')`
-      }}>
-      {/* Soft subtle gradient overlay on the left to guarantee optimal text readability */}
+    {/* BACKGROUND IMAGE */}
+    <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
+      <img src="/assets/cake5.webp" alt="" className="absolute inset-0 w-full h-full object-cover object-right md:object-center" draggable="false"/>{" "}
+      {/* Soft subtle gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-r from-[#FAF3EA]/90 via-[#FAF3EA]/65 to-transparent max-w-3xl"/>
     </div>
+
+    {/* Your content */}
 
     {/* TOP FLOATING CAPSULE NAVIGATION HEADER */}
     <div className="relative z-30 max-w-7xl mx-auto w-full px-4 sm:px-6 pt-4 sm:pt-6 pb-2">
