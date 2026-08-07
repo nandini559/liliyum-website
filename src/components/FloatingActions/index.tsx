@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowUp, Phone } from 'lucide-react';
+import { ArrowUp } from 'lucide-react';
 
 export const FloatingActions: React.FC = () => {
   const [showTopBtn, setShowTopBtn] = useState(false);
@@ -24,9 +24,9 @@ export const FloatingActions: React.FC = () => {
     });
   };
 
-  const whatsappMessage = encodeURIComponent(
-    'Hi Liliyum Patisserie, I would like to place an order!'
-  );
+  // const whatsappMessage = encodeURIComponent(
+  //   'Hi Liliyum Patisserie, I would like to place an order!'
+  // );
 
   return (
     <div className="fixed bottom-6 right-6 z-50 flex items-center gap-3 select-none pointer-events-auto">

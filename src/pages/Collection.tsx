@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Utensils } from 'lucide-react';
-import { FilterBar } from '../components/FilterBar';
+// import { FilterBar } from '../components/FilterBar';
 import { ProductCard } from '../components/ProductCard';
 import { PRODUCTS, CATEGORIES } from '../data/products';
 
@@ -10,7 +10,7 @@ export const Collection: React.FC = () => {
   const initialCategory = searchParams.get('category') || 'all';
 
   const [activeCategory, setActiveCategory] = useState<string>(initialCategory);
-  const [activeSort, setActiveSort] = useState<string>('featured');
+  const [activeSort] = useState<string>('featured');
 
   useEffect(() => {
     const cat = searchParams.get('category') || 'all';
