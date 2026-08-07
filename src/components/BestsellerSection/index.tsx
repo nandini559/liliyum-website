@@ -1,20 +1,12 @@
-import React, {useState} from "react";
+import React from "react";
 import {Link} from "react-router-dom";
-import {ShoppingBag, ChevronLeft, ChevronRight} from "lucide-react";
+import {ShoppingBag} from "lucide-react";
 import {PRODUCTS} from "../../data/products";
 
 export const BestsellerSection: React.FC = () => {
-  const [currentPage, setCurrentPage] = useState(1);
 
-  // 3 products per page matching 3 columns layout in reference image
-  const itemsPerPage = 3;
-  const startIndex = ((currentPage - 1) % Math.ceil(PRODUCTS.length / itemsPerPage)) * itemsPerPage;
-  const signatureProducts = PRODUCTS.slice(startIndex, startIndex + itemsPerPage);
-
-  // Ensure we always have 3 items
-  const displayProducts = signatureProducts.length === 3
-    ? signatureProducts
-    : PRODUCTS.slice(0, 3);
+  // 3 bestseller products matching 3 columns layout
+  const displayProducts = PRODUCTS.slice(0, 3);
 
   return (<section className="py-16 sm:py-24 bg-amber-200 text-amber-950 w-full max-w-full overflow-hidden select-none">
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 w-full">

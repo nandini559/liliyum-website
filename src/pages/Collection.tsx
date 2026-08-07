@@ -45,16 +45,16 @@ export const Collection: React.FC = () => {
   const currentCategoryInfo = CATEGORIES.find((c) => c.id === activeCategory);
 
   return (
-    <main className="py-12 sm:py-20 bg-[#FAF4ED] min-h-screen w-full max-w-full overflow-x-hidden relative select-none">
+    <main className="py-12 sm:py-20  min-h-screen w-full max-w-full overflow-x-hidden relative select-none mt-20 bg-amber-100">
       {/* Background Organic Wave Accent on Bottom Right */}
-      <div className="absolute bottom-0 right-0 w-96 h-96 opacity-40 pointer-events-none z-0">
+      {/* <div className="absolute bottom-0 right-0 w-96 h-96 opacity-40 pointer-events-none z-0">
         <svg viewBox="0 0 200 200" className="w-full h-full fill-[#EFE4D9]">
           <path d="M45,-60C58,-52,67,-37,71,-20C75,-3,74,16,66,32C58,48,43,61,25,68C7,75,-14,76,-32,70C-50,64,-65,51,-72,34C-79,17,-78,-4,-71,-22C-64,-40,-51,-55,-36,-64C-21,-73,-4,-76,14,-74C32,-72,32,-68,45,-60Z" transform="translate(100 100)" />
         </svg>
-      </div>
+      </div> */}
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10">
-        
+
         {/* Header Title Section */}
         <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14">
           <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl font-black text-[#5C3D2E] tracking-tight mb-3">
@@ -66,13 +66,13 @@ export const Collection: React.FC = () => {
         </div>
 
         {/* Filter & Sort Bar */}
-        <FilterBar
+        {/* <FilterBar
           activeCategory={activeCategory}
           onCategoryChange={handleCategoryChange}
           activeSort={activeSort}
           onSortChange={setActiveSort}
           totalResults={filteredProducts.length}
-        />
+        /> */}
 
         {/* Product Grid */}
         {filteredProducts.length > 0 ? (

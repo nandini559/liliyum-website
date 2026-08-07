@@ -1,31 +1,10 @@
 import React, {useState} from "react";
 import {motion, AnimatePresence} from "framer-motion";
-import {ChevronDown, X, Sparkles} from "lucide-react";
+import {X, Sparkles} from "lucide-react";
 
 export const Hero: React.FC = () => {
-  const [activeTab, setActiveTab] = useState("Home");
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
   const [selectedPack, setSelectedPack] = useState("pack-6");
-
-  const navItems = [
-    {
-      name: "Home",
-      path: "/"
-    }, {
-      name: "Services",
-      path: "/collection"
-    }, {
-      name: "About Us",
-      path: "#about"
-    }, {
-      name: "Location",
-      path: "#location"
-    }, {
-      name: "Contact Us",
-      path: "#contact"
-    }
-  ];
 
   return (<section className="relative w-full max-w-full min-h-[640px] sm:min-h-[720px] lg:min-h-[780px] bg-[#FAF3EA] text-[#3D1E16] overflow-hidden flex flex-col justify-between select-none">
     {/* BACKGROUND IMAGE */}
@@ -37,76 +16,7 @@ export const Hero: React.FC = () => {
 
     {/* Your content */}
 
-    {/* TOP FLOATING CAPSULE NAVIGATION HEADER */}
-    <div className="relative z-30 max-w-7xl mx-auto w-full px-4 sm:px-6 pt-4 sm:pt-6 pb-2">
-      <div className="bg-[#3B1C10]/95 backdrop-blur-md text-white rounded-full px-4 sm:px-6 md:px-8 py-2 sm:py-3 flex items-center justify-between shadow-xl border border-[#522919]/50 max-w-full">
-        {/* Navigation Links */}
-        <nav className="hidden md:flex items-center gap-1 sm:gap-2 max-w-full overflow-x-auto no-scrollbar">
-          {/* Brand Logo */}
-          <img src="/assets/lil_logo.webp" alt="logo" className="w-10 h-10 sm:w-12 sm:h-12 object-contain shrink-0 mr-1 sm:mr-2"></img>
-
-          {
-            navItems.map((item) => {
-              const isActive = activeTab === item.name;
-              return (<a key={item.name} href={item.path} onClick={() => setActiveTab(item.name)} className={`px-3 lg:px-5 py-1.5 rounded-full text-xs lg:text-sm font-medium transition-all duration-300 whitespace-nowrap shrink-0 ${
-                isActive
-                  ? "bg-white text-[#3B1C10] font-semibold shadow-md"
-                  : "text-[#E8D6C5] hover:text-white hover:bg-white/10"}`}>
-                {item.name}
-              </a>);
-            })
-          }
-        </nav>
-
-        {/* Right Action / Mobile menu toggle */}
-        <div className="flex items-center gap-3 shrink-0">
-          <button onClick={() => setIsOrderModalOpen(true)} className="hidden sm:inline-flex px-4 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-[#F3E5D8] text-xs font-medium transition-colors border border-white/10 cursor-pointer whitespace-nowrap">
-            Quick Order
-          </button>
-
-          {/* Mobile Dropdown Trigger */}
-          <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="md:hidden p-1.5 rounded-full hover:bg-white/10 text-[#F3E5D8] transition-colors cursor-pointer">
-            <ChevronDown className={`w-5 h-5 transition-transform duration-300 ${
-              isMenuOpen
-                ? "rotate-180"
-                : ""}`}/>
-          </button>
-        </div>
-      </div>
-
-      {/* Mobile Dropdown Menu */}
-      <AnimatePresence>
-        {
-          isMenuOpen && (<motion.div initial={{
-              opacity: 0,
-              y: -10,
-              scale: 0.95
-            }} animate={{
-              opacity: 1,
-              y: 0,
-              scale: 1
-            }} exit={{
-              opacity: 0,
-              y: -10,
-              scale: 0.95
-            }} className="md:hidden absolute top-full left-4 right-4 mt-2 bg-[#3B1C10] border border-[#522919] rounded-2xl shadow-2xl p-4 z-50 text-white max-w-[calc(100vw-2rem)]">
-            <div className="flex flex-col gap-2 font-serif text-sm">
-              {
-                navItems.map((item) => (<a key={item.name} href={item.path} onClick={() => {
-                    setActiveTab(item.name);
-                    setIsMenuOpen(false);
-                  }} className={`px-4 py-2 rounded-xl transition-colors ${
-                  activeTab === item.name
-                    ? "bg-white text-[#3B1C10] font-bold"
-                    : "hover:bg-white/10 text-[#E8D6C5]"}`}>
-                  {item.name}
-                </a>))
-              }
-            </div>
-          </motion.div>)
-        }
-      </AnimatePresence>
-    </div>
+    {/* Your content */}
 
     {/* HERO MAIN CONTENT (Left Aligned matching Reference Layout) */}
     <div className="relative z-10 max-w-7xl mx-auto w-full px-4 sm:px-8 lg:px-16 pt-8 sm:pt-16 pb-16 my-auto">

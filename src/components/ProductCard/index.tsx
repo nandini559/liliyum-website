@@ -35,7 +35,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, index = 0 }) 
           <img
             src={product.image}
             alt={product.name}
-            className="w-44 h-44 sm:w-52 sm:h-52 object-cover rounded-2xl drop-shadow-md group-hover:scale-105 transition-transform duration-500"
+            className="w-[82%] h-[82%] object-cover rounded-2xl drop-shadow-md group-hover:scale-105 transition-transform duration-500"
             loading="lazy"
           />
         </div>

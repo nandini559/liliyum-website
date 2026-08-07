@@ -1,147 +1,224 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { ShoppingBag, MapPin, Phone, Menu, X, ChevronRight } from 'lucide-react';
+import { ChevronDown, Sparkles, X } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export const Navbar: React.FC = () => {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
+  const [selectedPack, setSelectedPack] = useState('pack-6');
   const location = useLocation();
 
-  const navLinks = [
+  const navItems = [
     { name: 'Home', path: '/' },
-    { name: 'All Delights', path: '/collection' },
-    { name: 'Celebration Cakes', path: '/collection?category=celebration-cakes' },
-    { name: 'Belgian Chocolates', path: '/collection?category=belgian-chocolates' },
-    { name: 'Product Page', path: '/product' },
+    // { name: 'Menu', path: '/collection' },
+    // { name: 'Collection', path: '/product' },
   ];
 
   const isActive = (path: string) => {
-    if (path === '/') return location.pathname === '/';
+    if (path === '/') return location.pathname === '/' && !location.hash;
+    if (path.startsWith('/#')) return location.pathname === '/' && location.hash === `#${path.split('#')[1]}`;
     if (path === '/product') return location.pathname.startsWith('/product');
-    return location.pathname + location.search === path || (path === '/collection' && location.pathname === '/collection' && !location.search);
+    return (
+      location.pathname + location.search === path ||
+      (path === '/collection' && location.pathname === '/collection' && !location.search)
+    );
   };
 
   return (
-    <header className="sticky top-0 z-50 bg-[#FAF7F5]/90 backdrop-blur-md border-b border-[#EFE3DB] transition-all w-full max-w-full overflow-x-hidden">
-      {/* Top Banner Notice */}
-      {/* <div className="bg-[#2D2422] text-[#EAD5BE] text-xs py-1.5 px-4 text-center font-medium flex items-center justify-center gap-2">
-        <Sparkles className="w-3.5 h-3.5 text-[#D4A373] animate-pulse" />
-        <span>Freshly Baked Daily in Bangalore • Same-Day Express Delivery Available!</span>
-        <span className="hidden md:inline bg-[#D4A373]/20 px-2 py-0.5 rounded text-[10px] text-[#D4A373] font-semibold border border-[#D4A373]/30">
-          lil' yum guaranteed
-        </span>
-      </div> */}
+    <header className="fixed top-0 z-50 w-full max-w-full px-4 sm:px-6 pt-4 pb-2 bg-gradient-to-b from-[#FAF3EA]/80 to-transparent backdrop-blur-xs select-none ">
+      <div className="bg-[#3B1C10]/95 backdrop-blur-md text-white rounded-full px-4 sm:px-6 md:px-8 py-2 sm:py-3 flex items-center justify-between shadow-xl border border-[#522919]/50 max-w-7xl mx-auto">
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-        <div className="flex items-center justify-between h-20 gap-2 sm:gap-4">
-          {/* Brand Logo */}
-          <Link to="/" className="flex items-center gap-2.5 sm:gap-3 group shrink-0">
-            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#A8644A] flex items-center justify-center text-white font-serif text-lg sm:text-xl font-bold shadow-md group-hover:scale-105 transition-transform shrink-0">
-              L
-            </div>
-            <div className="shrink-0">
-              <span className="font-serif text-xl sm:text-2xl font-bold tracking-tight text-[#2D2422] block leading-none">
-                Liliyum
-              </span>
-              <span className="text-[9px] sm:text-[10px] tracking-[0.2em] sm:tracking-[0.25em] uppercase font-semibold text-[#A8644A] block mt-0.5 whitespace-nowrap">
-                Patisserie & Cafe
-              </span>
-            </div>
-          </Link>
+        {/* Brand Logo */}
+        <Link to="/" className="flex items-center gap-2 sm:gap-3 shrink-0 group">
+          <img
+            src="/assets/lil_logo.webp"
+            alt="Liliyum Logo"
+            className="w-8 h-8 sm:w-10 sm:h-10 object-contain shrink-0 group-hover:scale-105 transition-transform"
+          />
 
-          {/* Location Badge (Desktop) */}
-          {/* <div className="hidden lg:flex items-center gap-2 bg-[#F3E8E1] px-3.5 py-1.5 rounded-full border border-[#E7D6CB] text-xs font-medium text-[#594943]">
-            <MapPin className="w-3.5 h-3.5 text-[#A8644A]" />
-            <span>Delivering across <strong>Bangalore</strong></span>
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span>
-          </div> */}
+        </Link>
 
-          {/* Desktop Nav Links */}
-          <nav className="hidden lg:flex items-center gap-3 xl:gap-7">
-            {navLinks.map((link) => (
-              <Link
-                key={link.name}
-                to={link.path}
-                className={`text-xs xl:text-sm font-medium transition-colors relative py-1 whitespace-nowrap ${isActive(link.path)
-                  ? 'text-[#A8644A] font-semibold'
-                  : 'text-[#594943] hover:text-[#A8644A]'
+        {/* Navigation Links (Desktop) */}
+        <nav className="hidden lg:flex items-center gap-1 xl:gap-1.5 max-w-full overflow-x-auto no-scrollbar">
+          {navItems.map((item) => {
+            const active = isActive(item.path);
+            return (
+              <a
+                key={item.name}
+                href={item.path}
+                className={`px-3 xl:px-4 py-1.5 rounded-full text-xs xl:text-sm font-medium transition-all duration-300 whitespace-nowrap shrink-0 ${active
+                  ? 'bg-white text-[#3B1C10] font-semibold shadow-md'
+                  : 'text-[#E8D6C5] hover:text-white hover:bg-white/10'
                   }`}
               >
-                {link.name}
-                {isActive(link.path) && (
-                  <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#A8644A] rounded-full"></span>
-                )}
-              </Link>
-            ))}
-          </nav>
+                {item.name}
+              </a>
+            );
+          })}
+        </nav>
 
-          {/* Action CTAs */}
-          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
-            {/* <a
-              href="https://wa.me/919986350349?text=Hi%20Liliyum%20Patisserie,%20I%20would%20like%20to%20place%20an%20order"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hidden sm:inline-flex items-center gap-2 bg-[#2D2422] hover:bg-[#A8644A] text-[#EAD5BE] hover:text-white px-4 py-2 rounded-xl text-xs font-semibold shadow-sm transition-all duration-300"
-            >
-              <Phone className="w-3.5 h-3.5 text-[#D4A373]" />
-              <span>Order via WhatsApp</span>
-            </a> */}
+        {/* Right Action / Mobile Menu Toggle */}
+        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
 
-            <Link
-              to="/collection"
-              className="inline-flex items-center gap-1.5 bg-[#A8644A] hover:bg-[#8C4A32] text-white px-3 sm:px-4 py-2 rounded-xl text-xs font-semibold shadow-sm transition-all duration-300 shrink-0"
-            >
-              <ShoppingBag className="w-3.5 h-3.5" />
-              <span>Order Now</span>
-            </Link>
 
-            {/* Mobile Hamburger Toggle */}
-            <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="lg:hidden p-2 text-[#2D2422] hover:text-[#A8644A] focus:outline-none shrink-0"
-              aria-label="Toggle menu"
-            >
-              {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
-          </div>
+          <Link
+            to="/collection"
+            className="px-4 py-1.5 rounded-full bg-white text-[#3B1C10] hover:bg-[#F3E5D8] text-xs font-serif font-bold transition-all shadow-sm cursor-pointer whitespace-nowrap"
+          >
+            Order Now
+          </Link>
+
+          {/* Mobile Dropdown Trigger */}
+          <button
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="lg:hidden p-1.5 rounded-full hover:bg-white/10 text-[#F3E5D8] transition-colors cursor-pointer"
+            aria-label="Toggle Navigation Menu"
+          >
+            <ChevronDown
+              className={`w-5 h-5 transition-transform duration-300 ${isMenuOpen ? 'rotate-180' : ''
+                }`}
+            />
+          </button>
         </div>
       </div>
 
-      {/* Mobile Drawer Navigation */}
-      {isMobileMenuOpen && (
-        <div className="lg:hidden bg-[#FAF7F5] border-b border-[#EFE3DB] px-4 pt-3 pb-6 space-y-3 w-full max-w-full">
-          <div className="flex items-center gap-2 bg-[#F3E8E1] px-3 py-2 rounded-xl text-xs text-[#594943] mb-2">
-            <MapPin className="w-4 h-4 text-[#A8644A]" />
-            <span>Delivering across <strong>Bangalore</strong> (Same-Day)</span>
-          </div>
+      {/* Mobile Dropdown Navigation Menu */}
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -10, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -10, scale: 0.95 }}
+            className="lg:hidden absolute top-full left-4 right-4 mt-2 bg-[#3B1C10] border border-[#522919] rounded-2xl shadow-2xl p-4 z-50 text-white max-w-[calc(100vw-2rem)]"
+          >
+            <div className="flex flex-col gap-1.5 font-serif text-sm">
+              {navItems.map((item) => {
+                const active = isActive(item.path);
+                return (
+                  <a
+                    key={item.name}
+                    href={item.path}
+                    onClick={() => setIsMenuOpen(false)}
+                    className={`px-4 py-2 rounded-xl transition-colors ${active
+                      ? 'bg-white text-[#3B1C10] font-bold'
+                      : 'hover:bg-white/10 text-[#E8D6C5]'
+                      }`}
+                  >
+                    {item.name}
+                  </a>
+                );
+              })}
+              <button
+                onClick={() => {
+                  setIsMenuOpen(false);
+                  setIsOrderModalOpen(true);
+                }}
+                className="mt-2 w-full py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-[#F3E5D8] text-xs font-sans font-semibold text-center border border-white/10"
+              >
+                Quick Order
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-          {navLinks.map((link) => (
-            <Link
-              key={link.name}
-              to={link.path}
-              onClick={() => setIsMobileMenuOpen(false)}
-              className={`flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium ${isActive(link.path)
-                ? 'bg-[#F3E8E1] text-[#A8644A] font-semibold'
-                : 'text-[#594943] hover:bg-[#FAF0E6]'
-                }`}
+      {/* QUICK ORDER MODAL */}
+      <AnimatePresence>
+        {isOrderModalOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.9, opacity: 0, y: 20 }}
+              className="bg-[#FAF3EA] border border-[#E6D5C3] rounded-3xl p-5 sm:p-8 max-w-lg w-full max-h-[90vh] overflow-y-auto shadow-2xl relative text-[#3B1C10]"
             >
-              <span>{link.name}</span>
-              <ChevronRight className="w-4 h-4 text-gray-400" />
-            </Link>
-          ))}
+              <button
+                onClick={() => setIsOrderModalOpen(false)}
+                className="absolute top-4 right-4 w-9 h-9 rounded-full bg-white text-[#3B1C10] hover:bg-[#3B1C10] hover:text-white flex items-center justify-center transition-colors shadow-sm cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
 
-          <div className="pt-2 flex flex-col gap-2">
-            <a
-              href="https://wa.me/919986350349?text=Hi%20Liliyum%20Patisserie,%20I%20would%20like%20to%20place%20an%20order"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full flex items-center justify-center gap-2 bg-[#2D2422] text-[#EAD5BE] py-2.5 rounded-xl text-xs font-semibold"
-            >
-              <Phone className="w-4 h-4 text-[#D4A373]" />
-              <span>Order via WhatsApp (+91 99863 50349)</span>
-            </a>
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-12 h-12 rounded-2xl bg-[#3B1C10] text-[#FAF3EA] flex items-center justify-center shadow-lg">
+                  <Sparkles className="w-6 h-6" />
+                </div>
+                <div>
+                  <h3 className="text-2xl font-serif font-bold text-[#3B1C10]">
+                    Gourmet Vanilla Cupcakes
+                  </h3>
+                  <p className="text-xs text-[#7A5445] font-serif">
+                    Baked fresh daily with Madagascar vanilla bean
+                  </p>
+                </div>
+              </div>
+
+              {/* Product Preview Card */}
+              <div className="bg-white rounded-2xl p-4 border border-[#E6D5C3] shadow-sm mb-6 flex gap-4 items-center">
+                <img
+                  src="/hero_cupcakes.png"
+                  alt="Vanilla Cupcakes"
+                  className="w-20 h-20 object-cover rounded-xl bg-[#F5E9D9]"
+                />
+                <div className="flex-1">
+                  <h4 className="font-serif font-bold text-base text-[#3B1C10]">
+                    Madagascar Vanilla Bean Cupcakes
+                  </h4>
+                  <p className="text-xs text-[#7A5445] mt-0.5">
+                    Light sponge topped with fluffy buttercream swirl.
+                  </p>
+                  <div className="mt-2 flex items-center justify-between">
+                    <span className="font-serif font-bold text-lg text-[#3B1C10]">
+                      ₹890
+                    </span>
+                    <span className="text-[10px] bg-[#FAF3EA] text-[#3B1C10] px-2.5 py-0.5 rounded-full font-serif font-semibold">
+                      Pack of 6
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Pack Selector */}
+              <div className="mb-6">
+                <label className="block text-xs font-serif font-bold uppercase tracking-wider text-[#3B1C10] mb-2">
+                  Select Quantity Pack
+                </label>
+                <div className="grid grid-cols-3 gap-2">
+                  {[
+                    { id: 'pack-6', name: 'Pack of 6' },
+                    { id: 'pack-12', name: 'Box of 12' },
+                    { id: 'pack-24', name: 'Party Box 24' },
+                  ].map((pack) => (
+                    <button
+                      key={pack.id}
+                      onClick={() => setSelectedPack(pack.id)}
+                      className={`py-2 px-2 text-xs font-serif font-bold rounded-xl border transition-all cursor-pointer ${selectedPack === pack.id
+                        ? 'bg-[#3B1C10] text-white border-[#3B1C10] shadow-md'
+                        : 'bg-white text-[#3B1C10] border-[#E6D5C3] hover:border-[#3B1C10]'
+                        }`}
+                    >
+                      {pack.name}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="pt-2">
+                <Link
+                  to="/collection"
+                  onClick={() => setIsOrderModalOpen(false)}
+                  className="w-full py-3.5 px-6 rounded-full bg-[#3B1C10] hover:bg-[#28120A] text-white font-serif font-bold text-sm shadow-md flex items-center justify-center gap-2 transition-all cursor-pointer text-center"
+                >
+                  Order via Collection Page
+                </Link>
+              </div>
+            </motion.div>
           </div>
-        </div>
-      )}
+        )}
+      </AnimatePresence>
     </header>
   );
 };
+
+export default Navbar;

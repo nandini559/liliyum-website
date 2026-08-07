@@ -1,18 +1,8 @@
-import React, {useState} from "react";
+import React from "react";
 import {Link} from "react-router-dom";
 import {ArrowRight} from "lucide-react";
 
 export const LuxurySection: React.FC = () => {
-  const [activeFilter, setActiveFilter] = useState("Birthday Cakes");
-
-  const filterTabs = [
-    "Anniversary Cakes",
-    "Birthday Cakes",
-    "Photo Cakes",
-    "Custom Cakes",
-    "Theme Cakes",
-    "Belgian Truffles"
-  ];
 
   // 4 items for the left 2x2 grid
   const leftCards = [
