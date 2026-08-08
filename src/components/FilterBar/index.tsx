@@ -1,24 +1,16 @@
 import React from 'react';
-import { ChevronDown } from 'lucide-react';
-import { CATEGORIES, TAG_FILTERS } from '../../data/products';
+import { CATEGORIES } from '../../data/products';
 
 interface FilterBarProps {
   activeCategory: string;
   onCategoryChange: (categoryId: string) => void;
-  activeTag: string;
-  onTagChange: (tagId: string) => void;
-  activeSort: string;
-  onSortChange: (sortValue: string) => void;
-  totalResults: number;
+
 }
 
 export const FilterBar: React.FC<FilterBarProps> = ({
   activeCategory,
   onCategoryChange,
-  activeTag,
-  onTagChange,
-  activeSort,
-  onSortChange,
+
 }) => {
   return (
     <div className="w-full mb-8 sm:mb-12 space-y-5">
@@ -29,8 +21,8 @@ export const FilterBar: React.FC<FilterBarProps> = ({
             key={cat.id}
             onClick={() => onCategoryChange(cat.id)}
             className={`px-4 sm:px-5 py-2.5 rounded-2xl text-xs sm:text-sm font-bold whitespace-nowrap transition-all duration-200 cursor-pointer ${activeCategory === cat.id
-                ? 'bg-[#1C1C1C] text-white shadow-md'
-                : 'bg-white/80 hover:bg-white text-[#4A3E39] border border-[#EFE4D9] hover:border-[#D5C2B2] shadow-xs'
+              ? 'bg-[#1C1C1C] text-white shadow-md'
+              : 'bg-white/80 hover:bg-white text-[#4A3E39] border border-[#EFE4D9] hover:border-[#D5C2B2] shadow-xs'
               }`}
           >
             {cat.name}
