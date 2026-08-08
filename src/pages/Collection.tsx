@@ -11,7 +11,6 @@ export const Collection: React.FC = () => {
 
   const [activeCategory, setActiveCategory] = useState<string>(initialCategory);
   const [activeTag, setActiveTag] = useState<string>('all');
-  const [activeSort, setActiveSort] = useState<string>('popularity');
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   useEffect(() => {
@@ -64,15 +63,7 @@ export const Collection: React.FC = () => {
   }
 
   // Sort products
-  if (activeSort === 'price-asc') {
-    filteredProducts.sort((a, b) => a.price - b.price);
-  } else if (activeSort === 'price-desc') {
-    filteredProducts.sort((a, b) => b.price - a.price);
-  } else if (activeSort === 'rating') {
-    filteredProducts.sort((a, b) => b.rating - a.rating);
-  } else if (activeSort === 'popularity') {
-    filteredProducts.sort((a, b) => b.reviewsCount - a.reviewsCount);
-  }
+
 
   const currentCategoryInfo = CATEGORIES.find((c) => c.id === activeCategory);
 
@@ -114,11 +105,10 @@ export const Collection: React.FC = () => {
           <FilterBar
             activeCategory={activeCategory}
             onCategoryChange={handleCategoryChange}
-            activeTag={activeTag}
-            onTagChange={setActiveTag}
-            activeSort={activeSort}
-            onSortChange={setActiveSort}
-            totalResults={filteredProducts.length}
+
+
+
+
           />
         </div>
         </div>

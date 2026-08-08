@@ -1,8 +1,5 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
 import {
-  Sparkles,
-  Calendar,
   Clock,
   MapPin,
   MessageSquare,
@@ -11,16 +8,11 @@ import {
   Phone,
   ShieldCheck,
   Award,
-  ChevronRight,
   Plus,
   Check,
-  SlidersHorizontal,
-  Flame,
   Heart,
   Truck,
-  Star
 } from 'lucide-react';
-import { PRODUCTS } from '../data/products';
 
 export const About: React.FC = () => {
   // Gallery State
