@@ -20,10 +20,10 @@ export const App: React.FC = () => {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/menu" element={<Collection />} />
-              <Route path="/collection" element={<Collection />} />
+              {/* <Route path="/collection" element={<Collection />} /> */}
               <Route path="/about" element={<About />} />
               <Route path="/product" element={<Product />} />
-              <Route path="/product/:id" element={<Product />} />
+              {/* <Route path="/product/:id" element={<Product />} /> */}
             </Routes>
           </div>
           <Footer />
