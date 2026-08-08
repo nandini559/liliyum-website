@@ -457,3 +457,74 @@ export const DELIVERY_SLOTS = [
     price: "$5.00"
   }
 ];
+
+export interface UpsellItem {
+  id: string;
+  name: string;
+  category: string;
+  price: number;
+  priceDisplay: string;
+  image: string;
+  description: string;
+  popular?: boolean;
+}
+
+export const UPSELL_ITEMS: UpsellItem[] = [
+  {
+    id: "upsell-1",
+    name: "Gold Glitter Birthday Candle Set",
+    category: "Candles",
+    price: 3.50,
+    priceDisplay: "$3.50",
+    image: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=300&auto=format&fit=crop",
+    description: "Set of 12 premium metallic gold slow-burning birthday candles",
+    popular: true
+  },
+  {
+    id: "upsell-2",
+    name: "Elegant 'Happy Birthday' Acrylic Topper",
+    category: "Toppers",
+    price: 4.50,
+    priceDisplay: "$4.50",
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSWSK-uTQ5JH4HbgWnkkNP7z8DHJo4UF_XWFJTLuQoluw&s=10",
+    description: "Reusable mirror-gold acrylic cake topper for celebration photos",
+    popular: true
+  },
+  {
+    id: "upsell-3",
+    name: "Luxury Velvet Ribbon Gift Packaging & Bag",
+    category: "Packaging",
+    price: 6.00,
+    priceDisplay: "$6.00",
+    image: "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?q=80&w=300&auto=format&fit=crop",
+    description: "Signature Liliyum gift box with silk ribbon seal & complimentary note card"
+  },
+  {
+    id: "upsell-4",
+    name: "Handcrafted Fresh Rose Bouquet",
+    category: "Flowers",
+    price: 12.00,
+    priceDisplay: "$12.00",
+    image: "https://images.unsplash.com/photo-1561181286-d3fee7d55364?q=80&w=300&auto=format&fit=crop",
+    description: "Freshly cut red & pastel roses tied with artisan twine"
+  },
+  {
+    id: "upsell-5",
+    name: "Sparkling Celebration Fountain Fireworks Candle",
+    category: "Candles",
+    price: 5.00,
+    priceDisplay: "$5.00",
+    image: "https://images.unsplash.com/photo-1513151233558-d860c5398176?q=80&w=300&auto=format&fit=crop",
+    description: "Safe 45-second smokeless golden fountain sparkler for cake cutting"
+  },
+  {
+    id: "upsell-6",
+    name: "Belgian Dark Chocolate Truffle Box (4pcs)",
+    category: "Chocolates",
+    price: 9.50,
+    priceDisplay: "$9.50",
+    image: "https://images.unsplash.com/photo-1548907040-4baa42d10919?q=80&w=300&auto=format&fit=crop",
+    description: "70% single-origin dark cocoa pralines handcrafted by our master chef"
+  }
+];
+

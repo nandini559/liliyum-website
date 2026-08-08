@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Plus, Check } from 'lucide-react';
 import type { Product } from '../../data/products';
+import { useOrderModal } from '../../context/OrderModalContext';
 
 interface ProductCardProps {
   product: Product;
@@ -12,6 +13,7 @@ interface ProductCardProps {
 
 export const ProductCard: React.FC<ProductCardProps> = ({ product, index = 0, onAddToCart }) => {
   const [added, setAdded] = React.useState(false);
+  const { openOrderModal } = useOrderModal();
 
   // Vibrant pastel card background colors matching reference images
   const colorThemes = {
@@ -34,11 +36,13 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, index = 0, on
     e.preventDefault();
     e.stopPropagation();
     setAdded(true);
+    openOrderModal(product);
     if (onAddToCart) {
       onAddToCart(product, e);
     }
     setTimeout(() => setAdded(false), 1500);
   };
+
 
   return (
     <motion.div

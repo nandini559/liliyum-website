@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { Star, ShieldCheck, Sparkles, Phone, ChevronRight, MessageCircleHeart, Info } from 'lucide-react';
+import { Star, ShieldCheck, Sparkles, ChevronRight, MessageCircleHeart, Info, ShoppingBag } from 'lucide-react';
 import { ProductGallery } from '../components/ProductGallery';
 import { DeliverySelector } from '../components/DeliverySelector';
 import { ProductCard } from '../components/ProductCard';
 import { PRODUCTS } from '../data/products';
+import { useOrderModal } from '../context/OrderModalContext';
 
 export const Product: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const product = PRODUCTS.find((p) => p.id === id) || PRODUCTS[0];
+  const { openOrderModal } = useOrderModal();
 
   const [selectedVariant, setSelectedVariant] = useState(product.variants[0] || { id: 'v1', name: 'Standard', price: product.price });
   const [personalizationMessage, setPersonalizationMessage] = useState('');
@@ -22,13 +24,9 @@ export const Product: React.FC = () => {
 
   const recommendedProducts = PRODUCTS.filter((p) => p.id !== product.id && (p.category === product.category || p.isBestseller)).slice(0, 4);
 
-  const whatsappMessage = encodeURIComponent(
-    `Hi Liliyum Patisserie! I would like to order:\n\n*Product:* ${product.name}\n*Variant:* ${selectedVariant.name}\n*Price:* ₹${selectedVariant.price}\n*Message on Cake/Box:* ${personalizationMessage || 'None'}\n\nPlease confirm availability!`
-  );
-
   return (
     <main className="py-8 bg-[#FAF7F5] min-h-screen w-full max-w-full overflow-x-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-16">
         
         {/* Breadcrumbs */}
         <nav className="flex items-center gap-1.5 sm:gap-2 text-xs text-[#7A6760] mb-6 flex-wrap max-w-full">
@@ -100,11 +98,11 @@ export const Product: React.FC = () => {
               {/* Price */}
               <div className="flex items-baseline gap-3 pb-4 border-b border-[#F0E6DF]">
                 <span className="text-3xl font-bold text-[#2D2422]">
-                  ₹{selectedVariant.price.toLocaleString('en-IN')}
+                  ${selectedVariant.price.toFixed(2)}
                 </span>
                 {product.originalPrice && (
                   <span className="text-base text-gray-400 line-through">
-                    ₹{product.originalPrice.toLocaleString('en-IN')}
+                    ${product.originalPrice.toFixed(2)}
                   </span>
                 )}
                 <span className="text-xs text-[#8C7A72] font-medium">Taxes included</span>
@@ -134,7 +132,7 @@ export const Product: React.FC = () => {
                       }`}
                     >
                       <span>{variant.name}</span>
-                      <span className="ml-2 opacity-80">• ₹{variant.price}</span>
+                      <span className="ml-2 opacity-80">• ${variant.price.toFixed(2)}</span>
                     </button>
                   ))}
                 </div>
@@ -165,25 +163,25 @@ export const Product: React.FC = () => {
 
             {/* Ordering CTA */}
             <div className="space-y-3 pt-2">
-              <a
-                href={`https://wa.me/919986350349?text=${whatsappMessage}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full inline-flex items-center justify-center gap-2.5 bg-[#A8644A] hover:bg-[#8C4A32] text-white py-4 rounded-2xl font-bold text-sm shadow-lg shadow-[#A8644A]/20 transition-all duration-300 transform hover:-translate-y-0.5"
+              <button
+                type="button"
+                onClick={() => openOrderModal(product)}
+                className="w-full inline-flex items-center justify-center gap-2.5 bg-[#A8644A] hover:bg-[#8C4A32] text-white py-4 rounded-2xl font-bold text-sm shadow-lg shadow-[#A8644A]/20 transition-all duration-300 transform hover:-translate-y-0.5 cursor-pointer"
               >
-                <Phone className="w-4 h-4 text-white" />
-                <span>Order Now via WhatsApp (+91 99863 50349)</span>
-              </a>
+                <ShoppingBag className="w-4 h-4 text-white" />
+                <span>Place Order & Select Delivery Slot (${selectedVariant.price.toFixed(2)})</span>
+              </button>
 
               <p className="text-[11px] text-[#8C7A72] text-center flex items-center justify-center gap-1">
                 <Info className="w-3 h-3 text-[#A8644A]" />
-                <span>Direct instant confirmation & customized Bangalore delivery slot!</span>
+                <span>Direct instant confirmation, celebration add-ons & Bangalore delivery slot!</span>
               </p>
             </div>
 
           </div>
 
         </div>
+
 
         {/* Recommended Products Section */}
         {recommendedProducts.length > 0 && (

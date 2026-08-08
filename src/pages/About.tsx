@@ -1,21 +1,308 @@
 import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
-  Clock,
-  MapPin,
-  MessageSquare,
-  Gift,
-  CheckCircle2,
-  Phone,
   ShieldCheck,
   Award,
+  Truck,
+  Heart,
+  Sparkles,
+  ChevronLeft,
+  ChevronRight,
+  X,
+  ZoomIn,
+  MapPin,
+  Clock,
+  ArrowUpRight,
   Plus,
   Check,
-  Heart,
-  Truck,
+  Utensils
 } from 'lucide-react';
+import { useOrderModal } from '../context/OrderModalContext';
 
+interface CafeGalleryItem {
+  id: string;
+  title: string;
+  category: string;
+  image: string;
+  badge: string;
+  desc: string;
+  location: string;
+}
+
+/* -------------------------------------------------------------------------- */
+/* CARDWISE CAFE GALLERY CAROUSEL COMPONENT                                   */
+/* -------------------------------------------------------------------------- */
+const CafeCardCarousel: React.FC<{
+  items: CafeGalleryItem[];
+  activeCategory: string;
+  setActiveCategory: (cat: string) => void;
+  onOpenLightbox: (item: CafeGalleryItem) => void;
+  onOpenOrderModal: () => void;
+}> = ({ items, activeCategory, setActiveCategory, onOpenLightbox, onOpenOrderModal }) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const categories = ['All Ambience', 'Barista & Coffee', 'Artisan Kitchen', 'Patisserie Display', 'Cozy Patio'];
+
+  const prevSlide = () => {
+    setCurrentIndex((prev) => (prev === 0 ? Math.max(0, items.length - 1) : prev - 1));
+  };
+
+  const nextSlide = () => {
+    setCurrentIndex((prev) => (prev >= items.length - 1 ? 0 : prev + 1));
+  };
+
+  const safeIndex = Math.min(currentIndex, Math.max(0, items.length - 1));
+  const currentItem = items[safeIndex] || items[0];
+
+  return (
+    <section className="bg-white/90 rounded-[36px] p-6 sm:p-10 border border-white/80 shadow-xl relative overflow-hidden">
+      
+      {/* Header Controls & Filter Tabs */}
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 mb-8">
+        <div>
+          <div className="flex items-center gap-2 mb-2">
+            <span className="text-xs font-serif italic font-bold tracking-widest uppercase text-[#E88B2A] bg-[#FFF0E2] px-3 py-1 rounded-full border border-[#FAD6B5]">
+              Experience Liliyum Cafe
+            </span>
+            <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-700 bg-emerald-100 px-2.5 py-1 rounded-full flex items-center gap-1">
+              <Sparkles className="w-3 h-3" /> Cardwise Carousel
+            </span>
+          </div>
+          <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#2B1B17]">
+            Patisserie Cafe & Kitchen Gallery
+          </h2>
+        </div>
+
+        {/* Category Filters */}
+        <div className="flex items-center gap-2 overflow-x-auto pb-2 no-scrollbar">
+          {categories.map((cat) => (
+            <button
+              key={cat}
+              type="button"
+              onClick={() => {
+                setActiveCategory(cat);
+                setCurrentIndex(0);
+              }}
+              className={`px-4 py-2 rounded-full text-xs font-extrabold transition-all duration-300 cursor-pointer whitespace-nowrap ${
+                activeCategory === cat
+                  ? 'bg-[#2B1B17] text-[#EAD5BE] shadow-md scale-105'
+                  : 'bg-[#FAF7F5] text-[#594943] border border-[#E7D6CB] hover:bg-white'
+              }`}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Carousel Wrapper with Cards Track */}
+      {items.length > 0 && currentItem && (
+        <div className="relative">
+          
+          {/* Main Focused Card Carousel Frame */}
+          <div className="relative overflow-hidden py-2 min-h-[420px] sm:min-h-[460px]">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentItem.id}
+                initial={{ opacity: 0, x: 50, scale: 0.98 }}
+                animate={{ opacity: 1, x: 0, scale: 1 }}
+                exit={{ opacity: 0, x: -50, scale: 0.98 }}
+                transition={{ duration: 0.45, ease: 'easeOut' }}
+                className="bg-[#FAF7F5] rounded-3xl p-6 sm:p-8 border border-[#E7D6CB] shadow-xl flex flex-col lg:flex-row items-center justify-between gap-8"
+              >
+                {/* Left Card Image */}
+                <div className="w-full lg:w-1/2 aspect-[4/3] sm:aspect-[16/10] lg:aspect-[4/3] relative rounded-2xl overflow-hidden shadow-2xl bg-black group border border-white/40">
+                  <img
+                    src={currentItem.image}
+                    alt={currentItem.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                  />
+
+                  {/* Badges */}
+                  <div className="absolute top-4 left-4 right-4 flex items-center justify-between pointer-events-none">
+                    <span className="bg-black/70 backdrop-blur-md text-white font-extrabold text-[10px] sm:text-xs uppercase tracking-wider px-3.5 py-1.5 rounded-full border border-white/20 shadow-md">
+                      {currentItem.badge}
+                    </span>
+                    <span className="bg-white/95 backdrop-blur-md text-[#2B1B17] font-bold text-[10px] sm:text-xs px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-md">
+                      <MapPin className="w-3.5 h-3.5 text-[#E88B2A]" /> {currentItem.location}
+                    </span>
+                  </div>
+
+                  {/* Lightbox Enlarge Trigger */}
+                  <button
+                    type="button"
+                    onClick={() => onOpenLightbox(currentItem)}
+                    className="absolute bottom-4 right-4 bg-white/90 hover:bg-white text-[#2B1B17] px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-lg transition-all transform hover:scale-105 cursor-pointer z-10"
+                  >
+                    <ZoomIn className="w-4 h-4 text-[#E88B2A]" />
+                    <span className="hidden sm:inline">Enlarge Preview</span>
+                  </button>
+                </div>
+
+                {/* Right Card Content */}
+                <div className="w-full lg:w-1/2 space-y-4 text-[#2B1B17]">
+                  <div className="flex items-center gap-2">
+                    <span className="text-[11px] sm:text-xs font-bold uppercase tracking-widest text-[#E88B2A] bg-[#FFF0E2] px-3 py-1 rounded-full border border-[#FAD6B5]">
+                      {currentItem.category}
+                    </span>
+                    <span className="text-[11px] font-semibold text-gray-400">
+                      Card 0{safeIndex + 1} of 0{items.length}
+                    </span>
+                  </div>
+
+                  <h3 className="font-serif font-extrabold text-2xl sm:text-3xl md:text-4xl text-[#2B1B17] leading-tight">
+                    {currentItem.title}
+                  </h3>
+
+                  <p className="text-xs sm:text-sm text-[#6E554C] font-medium leading-relaxed">
+                    {currentItem.desc}
+                  </p>
+
+                  <div className="pt-3 flex flex-wrap items-center gap-3">
+                    <button
+                      type="button"
+                      onClick={onOpenOrderModal}
+                      className="px-6 py-3 rounded-full bg-[#E88B2A] hover:bg-[#D4791E] text-white font-bold text-xs sm:text-sm shadow-md transition-all cursor-pointer transform hover:scale-105 flex items-center gap-2"
+                    >
+                      <span>Experience Cafe & Order</span>
+                      <ArrowUpRight className="w-4 h-4" />
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => onOpenLightbox(currentItem)}
+                      className="px-4 py-3 rounded-full bg-white hover:bg-gray-50 text-[#2B1B17] border border-[#E7D6CB] font-bold text-xs transition-colors cursor-pointer"
+                    >
+                      View Details
+                    </button>
+                  </div>
+                </div>
+              </motion.div>
+            </AnimatePresence>
+          </div>
+
+          {/* Carousel Navigation Buttons & Indicators */}
+          <div className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-[#E7D6CB]/40">
+            {/* Dots */}
+            <div className="flex items-center gap-2">
+              {items.map((it, idx) => (
+                <button
+                  key={it.id}
+                  type="button"
+                  onClick={() => setCurrentIndex(idx)}
+                  className={`h-2.5 rounded-full transition-all duration-300 cursor-pointer ${
+                    safeIndex === idx ? 'w-8 bg-[#E88B2A]' : 'w-2.5 bg-[#E88B2A]/30 hover:bg-[#E88B2A]/60'
+                  }`}
+                  aria-label={`Go to slide ${idx + 1}`}
+                />
+              ))}
+            </div>
+
+            {/* Left / Right Arrow Buttons */}
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                onClick={prevSlide}
+                className="w-10 h-10 rounded-full bg-[#FAF7F5] hover:bg-[#2B1B17] text-[#2B1B17] hover:text-[#EAD5BE] border border-[#E7D6CB] flex items-center justify-center transition-all cursor-pointer shadow-sm"
+                aria-label="Previous Slide"
+              >
+                <ChevronLeft className="w-5 h-5" />
+              </button>
+              
+              <span className="text-xs font-bold text-[#2B1B17] px-2">
+                0{safeIndex + 1} / 0{items.length}
+              </span>
+
+              <button
+                type="button"
+                onClick={nextSlide}
+                className="w-10 h-10 rounded-full bg-[#FAF7F5] hover:bg-[#2B1B17] text-[#2B1B17] hover:text-[#EAD5BE] border border-[#E7D6CB] flex items-center justify-center transition-all cursor-pointer shadow-sm"
+                aria-label="Next Slide"
+              >
+                <ChevronRight className="w-5 h-5" />
+              </button>
+            </div>
+          </div>
+
+        </div>
+      )}
+
+    </section>
+  );
+};
+
+/* -------------------------------------------------------------------------- */
+/* MAIN ABOUT PAGE COMPONENT                                                  */
+/* -------------------------------------------------------------------------- */
 export const About: React.FC = () => {
-  // Gallery State
+  const { openOrderModal } = useOrderModal();
+
+  // Cafe Motion Gallery Data
+  const cafeGalleryItems: CafeGalleryItem[] = [
+    {
+      id: 'cg1',
+      title: 'Artisan Barista & Coffee Bar',
+      category: 'Barista & Coffee',
+      image: 'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?q=80&w=1000&auto=format&fit=crop',
+      badge: 'Live Espresso',
+      desc: 'Single-origin Ethiopian beans pulled fresh by our master baristas.',
+      location: 'Main Bar'
+    },
+    {
+      id: 'cg2',
+      title: 'French Pastry Baking Kitchen',
+      category: 'Artisan Kitchen',
+      image: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=1000&auto=format&fit=crop',
+      badge: 'Fresh Batch',
+      desc: 'Laminated croissant dough resting before 6 AM morning bake.',
+      location: 'Bake House'
+    },
+    {
+      id: 'cg3',
+      title: 'Liliyum Luxury Patisserie Counter',
+      category: 'Patisserie Display',
+      image: 'https://images.unsplash.com/photo-1517433670267-08bbd4be890f?q=80&w=1000&auto=format&fit=crop',
+      badge: 'Glass Showcase',
+      desc: 'Handcrafted eclairs, macarons, and Belgian chocolate tartlets.',
+      location: 'Front Display'
+    },
+    {
+      id: 'cg4',
+      title: 'Sunlit Outdoor Botanical Patio',
+      category: 'Cozy Patio',
+      image: 'https://images.unsplash.com/photo-1554118811-1e0d58224f24?q=80&w=1000&auto=format&fit=crop',
+      badge: 'Al-Fresco',
+      desc: 'Lush greenery and cozy rattan seating for peaceful afternoon high tea.',
+      location: 'Garden Patio'
+    },
+    {
+      id: 'cg5',
+      title: '70% Dark Chocolate Ganache Tempering',
+      category: 'Artisan Kitchen',
+      image: 'https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?q=80&w=1000&auto=format&fit=crop',
+      badge: 'Chef Craft',
+      desc: 'Hand-tempering Belgian dark chocolate for signature cake toppings.',
+      location: 'Chocolatier Station'
+    },
+    {
+      id: 'cg6',
+      title: 'Cozy Evening Lounge & Reading Nook',
+      category: 'Cozy Patio',
+      image: 'https://images.unsplash.com/photo-1442512595331-e89e73853f31?q=80&w=1000&auto=format&fit=crop',
+      badge: 'Warm Ambience',
+      desc: 'Soft ambient lighting and vintage velvet seating for relaxed coffee dates.',
+      location: 'Lounge'
+    }
+  ];
+
+  const [activeCafeCategory, setActiveCafeCategory] = useState<string>('All Ambience');
+  const [selectedLightboxImage, setSelectedLightboxImage] = useState<CafeGalleryItem | null>(null);
+
+  const filteredCafeGallery = activeCafeCategory === 'All Ambience'
+    ? cafeGalleryItems
+    : cafeGalleryItems.filter((item) => item.category === activeCafeCategory);
+
+  // General Cake Gallery Data
   const galleryItems = [
     {
       id: 'g1',
@@ -62,79 +349,12 @@ export const About: React.FC = () => {
   const [activeGalleryIndex, setActiveGalleryIndex] = useState(0);
   const [activeCategoryFilter, setActiveCategoryFilter] = useState('All');
 
-  // Filter Gallery Items
   const filteredGallery = activeCategoryFilter === 'All'
     ? galleryItems
     : galleryItems.filter(g => g.category === activeCategoryFilter);
 
   const selectedGallery = filteredGallery[activeGalleryIndex] || filteredGallery[0] || galleryItems[0];
 
-  // Variants State
-  const variants = [
-    { id: 'v-05', name: '0.5 kg (Serves 4-6)', basePrice: 40 },
-    { id: 'v-10', name: '1.0 kg (Serves 8-10)', basePrice: 65 },
-    { id: 'v-15', name: '1.5 kg (Serves 12-15)', basePrice: 90 },
-    { id: 'v-20', name: '2.0 kg (Serves 16-20)', basePrice: 115 }
-  ];
-
-  const dietaryOptions = [
-    { id: 'classic', label: 'Classic Standard', extraPrice: 0 },
-    { id: 'eggless', label: '100% Eggless', extraPrice: 2 },
-    { id: 'vegan', label: 'Vegan / Plant-Based', extraPrice: 4 },
-    { id: 'gluten-free', label: 'Gluten-Free', extraPrice: 4 }
-  ];
-
-  const flavorOptions = [
-    { id: 'f1', name: '70% Belgian Dark Truffle' },
-    { id: 'f2', name: 'Rose & Roasted Pistachio' },
-    { id: 'f3', name: 'Lotus Biscoff Speculoos' },
-    { id: 'f4', name: 'Madagascar Vanilla Bean & Berry' }
-  ];
-
-  const [selectedVariant, setSelectedVariant] = useState(variants[1]);
-  const [selectedDiet, setSelectedDiet] = useState(dietaryOptions[0]);
-  const [selectedFlavor, setSelectedFlavor] = useState(flavorOptions[0]);
-
-  // Delivery Slot Picker State
-  const [pincode, setPincode] = useState('560038');
-  const [pincodeStatus, setPincodeStatus] = useState<string | null>('Available for Express Same-Day Delivery!');
-  const [selectedDate, setSelectedDate] = useState('Today');
-  const [selectedSlot, setSelectedSlot] = useState('Evening (05:00 PM - 08:00 PM)');
-
-  const deliverySlots = [
-    { id: 's1', label: 'Morning Slot', time: '09:00 AM - 12:00 PM', fee: 0, tag: 'FREE' },
-    { id: 's2', label: 'Afternoon Slot', time: '01:00 PM - 04:00 PM', fee: 0, tag: 'FREE' },
-    { id: 's3', label: 'Evening Slot', time: '05:00 PM - 08:00 PM', fee: 0, tag: 'FREE' },
-    { id: 's4', label: 'Midnight Express', time: '11:30 PM - 12:00 AM', fee: 5, tag: '+$5.00' }
-  ];
-
-  const handlePincodeCheck = (code: string) => {
-    setPincode(code);
-    if (code.length === 6) {
-      if (code.startsWith('56')) {
-        setPincodeStatus('Available for Express Same-Day Delivery in Bangalore!');
-      } else {
-        setPincodeStatus('Standard 24-48 hr courier shipping available for this area.');
-      }
-    } else {
-      setPincodeStatus(null);
-    }
-  };
-
-  // Personalization State
-  const [cakeMessage, setCakeMessage] = useState('');
-  const [selectedTopper, setSelectedTopper] = useState('Gold Acrylic "Happy Birthday"');
-  const [giftNote, setGiftNote] = useState('');
-
-  const toppers = [
-    { id: 't0', label: 'No Topper', price: 0 },
-    { id: 't1', label: 'Gold Acrylic "Happy Birthday"', price: 3 },
-    { id: 't2', label: 'Rose Gold "Happy Anniversary"', price: 3 },
-    { id: 't3', label: 'Silver Mirror "Bride to Be"', price: 3 },
-    { id: 't4', label: 'Custom Name Acrylic Topper', price: 5 }
-  ];
-
-  // Upsells / Add-ons State
   const upsellItems = [
     {
       id: 'u1',
@@ -176,32 +396,6 @@ export const About: React.FC = () => {
     }
   };
 
-  // Calculate Total Price
-  const topperObj = toppers.find(t => t.label === selectedTopper) || toppers[0];
-  const slotObj = deliverySlots.find(s => s.label.includes(selectedSlot.split(' ')[0])) || deliverySlots[2];
-  const upsellsTotal = selectedUpsells.reduce((acc, currId) => {
-    const item = upsellItems.find(u => u.id === currId);
-    return acc + (item ? item.price : 0);
-  }, 0);
-
-  const totalPrice = selectedVariant.basePrice + selectedDiet.extraPrice + topperObj.price + slotObj.fee + upsellsTotal;
-
-  // Build WhatsApp Order Link
-  const whatsappPayload = encodeURIComponent(
-    `Hi Liliyum Patisserie!\nI would like to place a custom cake order:\n\n` +
-    `🎂 *Flavor:* ${selectedFlavor.name}\n` +
-    `⚖️ *Portion:* ${selectedVariant.name}\n` +
-    `🌱 *Diet Preference:* ${selectedDiet.label}\n` +
-    `✍️ *Message on Cake:* ${cakeMessage || 'None'}\n` +
-    `👑 *Topper:* ${selectedTopper}\n` +
-    `🎁 *Gift Note:* ${giftNote || 'None'}\n` +
-    `📅 *Delivery Date:* ${selectedDate}\n` +
-    `🕒 *Delivery Slot:* ${selectedSlot}\n` +
-    `📍 *Pincode:* ${pincode}\n` +
-    `✨ *Add-ons:* ${selectedUpsells.length > 0 ? selectedUpsells.map(id => upsellItems.find(u => u.id === id)?.name).join(', ') : 'None'}\n\n` +
-    `💰 *Estimated Total:* $${totalPrice.toFixed(2)}\n\nPlease confirm availability!`
-  );
-
   return (
     <main className="py-8 sm:py-16 min-h-screen w-full max-w-full overflow-x-hidden relative select-none mt-16 sm:mt-20 bg-gradient-to-br from-[#FFE8EF] via-[#FFF4E3] to-[#E4F5EE]">
       {/* Background Decor */}
@@ -215,48 +409,307 @@ export const About: React.FC = () => {
 
         {/* 1. HERO / ABOUT STORY SECTION */}
         <section className="text-center max-w-4xl mx-auto pt-4">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+            <span className="text-xs font-serif font-bold italic tracking-widest uppercase text-[#E07A2E] bg-[#FFF0E2] px-4 py-1.5 rounded-full border border-[#FAD6B5] inline-block mb-3">
+              Established 2018 • Bangalore
+            </span>
+            <h1 className="font-serif text-3xl sm:text-4xl md:text-6xl font-black text-[#2B1B17] tracking-tight mb-5 leading-tight">
+              Crafting Unforgettable Moments, One Slice at a Time
+            </h1>
+            <p className="text-sm sm:text-base text-[#6E554C] font-medium leading-relaxed max-w-2xl mx-auto">
+              At Liliyum, we combine French pastry techniques with 100% single-origin Belgian chocolate, organic fruits, and artisan passion. Every cake is baked fresh to order for your special celebrations.
+            </p>
 
-          <h1 className="font-serif text-2xl sm:text-3xl md:text-6xl font-black text-[#2B1B17] tracking-tight mb-5 leading-tight">
-            Crafting Unforgettable Moments, One Slice at a Time
-          </h1>
-          <p className="text-sm sm:text-sm text-[#6E554C] font-medium leading-relaxed max-w-2xl mx-auto">
-            At Liliyum, we combine French pastry techniques with 100% single-origin Belgian chocolate, organic fruits, and artisan passion. Every cake is baked fresh to order for your special celebrations.
-          </p>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 mt-10 text-left">
+              <div className="bg-white/90 p-5 rounded-3xl border border-white/60 shadow-sm flex flex-col items-center text-center hover:shadow-md transition-shadow">
+                <ShieldCheck className="w-8 h-8 text-[#75DEC0] mb-2" />
+                <h4 className="font-serif font-extrabold text-[#2B1B17] text-base">100% Fresh Daily</h4>
+                <p className="text-xs text-gray-600 mt-1">Baked on the date of delivery</p>
+              </div>
+              <div className="bg-white/90 p-5 rounded-3xl border border-white/60 shadow-sm flex flex-col items-center text-center hover:shadow-md transition-shadow">
+                <Award className="w-8 h-8 text-[#FFD363] mb-2" />
+                <h4 className="font-serif font-extrabold text-[#2B1B17] text-base">Belgian Cocoa</h4>
+                <p className="text-xs text-gray-600 mt-1">70% single-origin cocoa</p>
+              </div>
+              <div className="bg-white/90 p-5 rounded-3xl border border-white/60 shadow-sm flex flex-col items-center text-center hover:shadow-md transition-shadow">
+                <Truck className="w-8 h-8 text-[#F45B82] mb-2" />
+                <h4 className="font-serif font-extrabold text-[#2B1B17] text-base">Same-Day Slots</h4>
+                <p className="text-xs text-gray-600 mt-1">Temperature-controlled vans</p>
+              </div>
+              <div className="bg-white/90 p-5 rounded-3xl border border-white/60 shadow-sm flex flex-col items-center text-center hover:shadow-md transition-shadow">
+                <Heart className="w-8 h-8 text-rose-500 mb-2" />
+                <h4 className="font-serif font-extrabold text-[#2B1B17] text-base">Custom Made</h4>
+                <p className="text-xs text-gray-600 mt-1">Personalized message & toppers</p>
+              </div>
+            </div>
+          </motion.div>
+        </section>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 mt-10 text-left">
-            <div className="bg-white/90 p-5 rounded-3xl border border-white/60 shadow-sm flex flex-col items-center text-center">
-              <ShieldCheck className="w-8 h-8 text-[#75DEC0] mb-2" />
-              <h4 className="font-serif font-extrabold text-[#2B1B17] text-base">100% Fresh Daily</h4>
-              <p className="text-xs text-gray-600 mt-1">Baked on the date of delivery</p>
-            </div>
-            <div className="bg-white/90 p-5 rounded-3xl border border-white/60 shadow-sm flex flex-col items-center text-center">
-              <Award className="w-8 h-8 text-[#FFD363] mb-2" />
-              <h4 className="font-serif font-extrabold text-[#2B1B17] text-base">Belgian Cocoa</h4>
-              <p className="text-xs text-gray-600 mt-1">70% single-origin cocoa</p>
-            </div>
-            <div className="bg-white/90 p-5 rounded-3xl border border-white/60 shadow-sm flex flex-col items-center text-center">
-              <Truck className="w-8 h-8 text-[#F45B82] mb-2" />
-              <h4 className="font-serif font-extrabold text-[#2B1B17] text-base">Same-Day Slots</h4>
-              <p className="text-xs text-gray-600 mt-1">Temperature-controlled vans</p>
-            </div>
-            <div className="bg-white/90 p-5 rounded-3xl border border-white/60 shadow-sm flex flex-col items-center text-center">
-              <Heart className="w-8 h-8 text-rose-500 mb-2" />
-              <h4 className="font-serif font-extrabold text-[#2B1B17] text-base">Custom Made</h4>
-              <p className="text-xs text-gray-600 mt-1">Personalized message & toppers</p>
-            </div>
+        {/* 2. "SHOP BY CATEGORY" BENTO GRID SECTION */}
+        <section className="relative w-full">
+          <div className="text-center mb-8 sm:mb-12">
+            <span className="font-serif italic font-bold text-2xl sm:text-3xl text-[#E88B2A] block mb-1">
+              Which One
+            </span>
+            <h2 className="font-sans font-extrabold text-3xl sm:text-4xl md:text-5xl text-[#1C1C1C] tracking-tight">
+              Shop By Category
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-5 sm:gap-6 relative">
+            <motion.div
+              initial={{ opacity: 0, y: 25 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="md:col-span-8 bg-[#181818] rounded-[28px] sm:rounded-[36px] overflow-hidden p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl border border-black/20 group relative min-h-[300px]"
+            >
+              <div className="w-full sm:w-1/2 h-56 sm:h-full relative overflow-hidden rounded-2xl">
+                <img
+                  src="https://images.unsplash.com/photo-1551024709-8f23befc6f87?q=80&w=800&auto=format&fit=crop"
+                  alt="Local Donuts & Coffee"
+                  className="w-full h-full object-cover rounded-2xl group-hover:scale-105 transition-transform duration-700 ease-out"
+                />
+              </div>
+
+              <div className="w-full sm:w-1/2 text-white space-y-3 z-10">
+                <span className="font-serif italic font-semibold text-xl text-[#F0993D] block">
+                  Coffee
+                </span>
+                <h3 className="font-sans font-extrabold text-2xl sm:text-3xl tracking-tight text-white leading-snug">
+                  Local Donuts
+                </h3>
+                <p className="text-xs sm:text-sm text-gray-300 font-normal leading-relaxed">
+                  Stone-ground espresso paired with our signature glaze-dipped artisan donuts baked fresh daily.
+                </p>
+                <div className="pt-2">
+                  <button
+                    type="button"
+                    onClick={() => openOrderModal()}
+                    className="px-6 py-2.5 rounded-full bg-[#E88B2A] hover:bg-[#D4791E] text-white font-bold text-xs sm:text-sm transition-all shadow-md cursor-pointer transform hover:scale-105 inline-flex items-center gap-2"
+                  >
+                    <span>Browse Shop</span>
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 25 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="md:col-span-4 bg-[#FAF6F0] rounded-[28px] sm:rounded-[36px] p-6 sm:p-8 flex flex-col items-center justify-center text-center shadow-md border border-[#E6DEC3]/60 group relative overflow-hidden min-h-[300px]"
+            >
+              <div className="relative z-10 space-y-2 flex flex-col items-center">
+                <div className="relative mb-2">
+                  <img
+                    src="https://images.unsplash.com/photo-1576618148400-f54bed99fcfd?q=80&w=400&auto=format&fit=crop"
+                    alt="Homemade Cupcake"
+                    className="w-28 h-28 sm:w-32 sm:h-32 object-cover rounded-full border-4 border-white shadow-lg group-hover:scale-110 transition-transform duration-500"
+                  />
+                  <span className="absolute -bottom-1 -right-1 bg-[#E88B2A] text-white text-[10px] font-serif italic px-2 py-0.5 rounded-full shadow-xs">
+                    Bakery Fresh
+                  </span>
+                </div>
+                <h4 className="font-serif italic font-bold text-2xl text-[#1F1F1F] leading-tight">
+                  home made cupcake
+                </h4>
+                <p className="text-xs text-[#736357] font-medium max-w-[200px]">
+                  Fluffy Madagascar vanilla sponge topped with Belgian buttercream swirl.
+                </p>
+                <button
+                  type="button"
+                  onClick={() => openOrderModal()}
+                  className="mt-3 text-xs font-extrabold text-[#E88B2A] hover:underline cursor-pointer"
+                >
+                  Order Cupcake Boxes →
+                </button>
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 25 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="md:col-span-4 bg-[#1E1E1E] rounded-[28px] sm:rounded-[36px] p-6 sm:p-8 text-white flex flex-col justify-between shadow-xl border border-black/20 group relative overflow-hidden min-h-[380px]"
+            >
+              <div className="space-y-3 z-10">
+                <span className="font-serif italic font-semibold text-xl text-[#F0993D] block">
+                  Breakfast
+                </span>
+                <h3 className="font-sans font-extrabold text-2xl sm:text-3xl tracking-tight text-white leading-tight">
+                  Chocolate Cake
+                </h3>
+                <p className="text-xs text-gray-300 leading-relaxed">
+                  Rich 70% dark cocoa layer cake topped with silken chocolate ganache and roasted hazelnuts.
+                </p>
+                <div className="pt-2">
+                  <button
+                    type="button"
+                    onClick={() => openOrderModal()}
+                    className="px-6 py-2.5 rounded-full bg-[#E88B2A] hover:bg-[#D4791E] text-white font-bold text-xs transition-all shadow-md cursor-pointer transform hover:scale-105 inline-flex items-center gap-2"
+                  >
+                    <span>Browse Shop</span>
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+
+              <div className="mt-6 relative h-40 w-full overflow-hidden rounded-2xl">
+                <img
+                  src="https://images.unsplash.com/photo-1606313564200-e75d5e30476c?q=80&w=800&auto=format&fit=crop"
+                  alt="Chocolate Ganache & Cocoa"
+                  className="w-full h-full object-cover rounded-2xl group-hover:scale-105 transition-transform duration-700"
+                />
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 25 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              className="md:col-span-4 bg-[#FAF6F0] rounded-[28px] sm:rounded-[36px] p-6 sm:p-8 flex flex-col justify-between shadow-md border border-[#E6DEC3]/60 group relative overflow-hidden min-h-[340px]"
+            >
+              <div>
+                <span className="font-serif italic font-semibold text-xl text-[#E88B2A] block mb-1">
+                  Which One
+                </span>
+                <h4 className="font-sans font-extrabold text-2xl text-[#1C1C1C]">
+                  Artisan Macarons
+                </h4>
+                <p className="text-xs text-[#736357] mt-1">
+                  French almond meringue shells filled with raspberry, pistachio & chocolate ganache.
+                </p>
+              </div>
+
+              <div className="mt-4 relative h-44 w-full overflow-hidden rounded-2xl">
+                <img
+                  src="https://images.unsplash.com/photo-1569864358642-9d1684040f43?q=80&w=600&auto=format&fit=crop"
+                  alt="French Macarons"
+                  className="w-full h-full object-cover rounded-2xl group-hover:scale-105 transition-transform duration-500"
+                />
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 25 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+              className="md:col-span-4 bg-white rounded-[28px] sm:rounded-[36px] p-6 sm:p-8 flex flex-col justify-between shadow-lg border border-gray-100 group relative overflow-hidden min-h-[340px]"
+            >
+              <div>
+                <span className="font-serif italic font-semibold text-xl text-[#E88B2A] block mb-1">
+                  Which One
+                </span>
+                <h4 className="font-sans font-extrabold text-2xl text-[#1C1C1C]">
+                  Choco Cherry Croissant
+                </h4>
+                <p className="text-xs text-gray-500 mt-1">
+                  Flaky butter croissants filled with dark chocolate ganache and amarena cherry glaze.
+                </p>
+              </div>
+
+              <div className="mt-4 relative h-44 w-full overflow-hidden rounded-2xl">
+                <img
+                  src="https://images.unsplash.com/photo-1555507036-ab1f4038808a?q=80&w=800&auto=format&fit=crop"
+                  alt="Choco Cherry Croissants"
+                  className="w-full h-full object-cover rounded-2xl group-hover:scale-105 transition-transform duration-500"
+                />
+              </div>
+            </motion.div>
           </div>
         </section>
 
-        {/* 2. GALLERY SECTION */}
+        {/* 3. CARDWISE CAFE GALLERY CAROUSEL SECTION */}
+        <CafeCardCarousel
+          items={filteredCafeGallery}
+          activeCategory={activeCafeCategory}
+          setActiveCategory={setActiveCafeCategory}
+          onOpenLightbox={(item) => setSelectedLightboxImage(item)}
+          onOpenOrderModal={openOrderModal}
+        />
+
+        {/* Interactive Lightbox Motion Modal */}
+        <AnimatePresence>
+          {selectedLightboxImage && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                className="bg-[#FAF7F5] rounded-3xl max-w-3xl w-full overflow-hidden shadow-2xl relative border border-white/20 text-[#2B1B17]"
+              >
+                <button
+                  type="button"
+                  onClick={() => setSelectedLightboxImage(null)}
+                  className="absolute top-4 right-4 z-20 w-10 h-10 rounded-full bg-black/60 hover:bg-black text-white flex items-center justify-center transition-colors cursor-pointer"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+
+                <div className="relative aspect-[16/9] bg-black">
+                  <img
+                    src={selectedLightboxImage.image}
+                    alt={selectedLightboxImage.title}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute top-4 left-4 bg-black/70 backdrop-blur-md text-white font-bold text-xs uppercase px-3 py-1 rounded-full">
+                    {selectedLightboxImage.badge}
+                  </div>
+                </div>
+
+                <div className="p-6 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold uppercase tracking-wider text-[#E88B2A]">
+                      {selectedLightboxImage.category} • {selectedLightboxImage.location}
+                    </span>
+                    <span className="text-xs text-gray-500 flex items-center gap-1">
+                      <Clock className="w-3.5 h-3.5 text-[#E88B2A]" /> Open Daily 8:00 AM - 11:00 PM
+                    </span>
+                  </div>
+
+                  <h3 className="font-serif text-2xl font-bold text-[#2B1B17]">
+                    {selectedLightboxImage.title}
+                  </h3>
+                  <p className="text-xs sm:text-sm text-[#7A6760] leading-relaxed">
+                    {selectedLightboxImage.desc}
+                  </p>
+
+                  <div className="pt-4 border-t border-[#E7D6CB] flex flex-wrap items-center justify-between gap-3">
+                    <div className="flex items-center gap-2 text-xs font-semibold text-emerald-800 bg-emerald-50 px-3 py-1.5 rounded-xl">
+                      <Utensils className="w-4 h-4 text-emerald-600" /> Fresh Artisan Patisserie Served Hourly
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSelectedLightboxImage(null);
+                        openOrderModal();
+                      }}
+                      className="px-6 py-2.5 rounded-full bg-[#E88B2A] hover:bg-[#D4791E] text-white font-bold text-xs shadow-md transition-all cursor-pointer"
+                    >
+                      Place Quick Cafe Order →
+                    </button>
+                  </div>
+                </div>
+              </motion.div>
+            </div>
+          )}
+        </AnimatePresence>
+
+        {/* 4. GENERAL CAKE GALLERY SHOWCASE SECTION */}
         <section className="bg-white/90 rounded-[36px] p-6 sm:p-10 border border-white/80 shadow-lg">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
             <div>
-
               <h2 className="font-serif text-3xl sm:text-4xl font-extrabold text-[#2B1B17]">
                 Cake Gallery & Signature Creations
               </h2>
             </div>
-            {/* Gallery Category Filter Tabs */}
             <div className="flex items-center gap-2 overflow-x-auto pb-2 no-scrollbar">
               {['All', 'Signature', 'Celebration', 'Cheesecakes', 'Luxury'].map((cat) => (
                 <button
@@ -265,10 +718,11 @@ export const About: React.FC = () => {
                     setActiveCategoryFilter(cat);
                     setActiveGalleryIndex(0);
                   }}
-                  className={`px-4 py-1.5 rounded-full text-xs font-extrabold transition-all cursor-pointer ${activeCategoryFilter === cat
-                    ? 'bg-[#1C1C1C] text-white shadow-md'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                    }`}
+                  className={`px-4 py-1.5 rounded-full text-xs font-extrabold transition-all cursor-pointer ${
+                    activeCategoryFilter === cat
+                      ? 'bg-[#1C1C1C] text-white shadow-md'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
                 >
                   {cat}
                 </button>
@@ -276,14 +730,13 @@ export const About: React.FC = () => {
             </div>
           </div>
 
-          {/* Gallery Layout: Large Showcase Left, Thumbnails Right */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            {/* Main Image Viewport */}
             <div className="lg:col-span-7 relative aspect-[4/3] rounded-3xl overflow-hidden shadow-md bg-black">
               <img
                 src={selectedGallery.image}
                 alt={selectedGallery.title}
-                className="w-full h-full object-cover transition-transform duration-700 hover:scale-[1.02]" />
+                className="w-full h-full object-cover transition-transform duration-700 hover:scale-[1.02]"
+              />
               <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-md px-3.5 py-1 rounded-full text-xs font-black text-[#2B1B17] uppercase tracking-wider shadow-sm">
                 {selectedGallery.badge}
               </div>
@@ -293,7 +746,6 @@ export const About: React.FC = () => {
               </div>
             </div>
 
-            {/* Thumbnail Selector Grid */}
             <div className="lg:col-span-5 space-y-4">
               <h4 className="text-xs font-extrabold uppercase tracking-wider text-gray-500">
                 Select Creation ({filteredGallery.length} Items):
@@ -303,10 +755,11 @@ export const About: React.FC = () => {
                   <button
                     key={item.id}
                     onClick={() => setActiveGalleryIndex(idx)}
-                    className={`flex items-center gap-4 p-3 rounded-2xl border text-left transition-all cursor-pointer ${activeGalleryIndex === idx
-                      ? 'bg-[#FFE8EF] border-[#F45B82] shadow-sm'
-                      : 'bg-white hover:bg-gray-50 border-gray-100'
-                      }`}
+                    className={`flex items-center gap-4 p-3 rounded-2xl border text-left transition-all cursor-pointer ${
+                      activeGalleryIndex === idx
+                        ? 'bg-[#FFE8EF] border-[#F45B82] shadow-sm'
+                        : 'bg-white hover:bg-gray-50 border-gray-100'
+                    }`}
                   >
                     <img
                       src={item.image}
@@ -329,260 +782,7 @@ export const About: React.FC = () => {
           </div>
         </section>
 
-        {/* 3. VARIANTS & CUSTOMIZATION SECTION */}
-        <section className="bg-white/90 rounded-[36px] p-6 sm:p-10 border border-white/80 shadow-lg">
-          <div className="max-w-3xl mb-8">
-            <span className="text-xs font-black uppercase tracking-widest text-[#F45B82] block mb-1">
-              Custom Portion & Flavor Options
-            </span>
-            <h2 className="font-serif text-3xl sm:text-4xl font-extrabold text-[#2B1B17]">
-              Select Weight, Flavor & Dietary Base
-            </h2>
-            <p className="text-xs sm:text-sm text-gray-600 mt-1">
-              Choose your portion size, preferred flavor profile, and eggless or vegan requirements.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Weight / Portion Selector */}
-            <div className="bg-[#FAF7F5] p-5 rounded-3xl border border-[#EFE4D9] space-y-3">
-              <label className="text-xs font-extrabold uppercase tracking-wider text-[#2B1B17] block flex items-center justify-between">
-                <span>1. Portion Size (Weight):</span>
-                <span className="text-[#F45B82] font-black text-sm">${selectedVariant.basePrice.toFixed(2)}</span>
-              </label>
-              <div className="space-y-2">
-                {variants.map((v) => (
-                  <button
-                    key={v.id}
-                    onClick={() => setSelectedVariant(v)}
-                    className={`w-full py-2.5 px-4 rounded-xl text-xs font-bold text-left flex items-center justify-between border transition-all cursor-pointer ${selectedVariant.id === v.id
-                      ? 'bg-[#1C1C1C] text-white border-[#1C1C1C] shadow-sm'
-                      : 'bg-white text-gray-800 border-gray-200 hover:border-gray-400'
-                      }`}
-                  >
-                    <span>{v.name}</span>
-                    <span>${v.basePrice.toFixed(2)}</span>
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Flavor Selection */}
-            <div className="bg-[#FAF7F5] p-5 rounded-3xl border border-[#EFE4D9] space-y-3">
-              <label className="text-xs font-extrabold uppercase tracking-wider text-[#2B1B17] block">
-                2. Signature Flavor Profile:
-              </label>
-              <div className="space-y-2">
-                {flavorOptions.map((f) => (
-                  <button
-                    key={f.id}
-                    onClick={() => setSelectedFlavor(f)}
-                    className={`w-full py-2.5 px-4 rounded-xl text-xs font-bold text-left border transition-all cursor-pointer ${selectedFlavor.id === f.id
-                      ? 'bg-[#F45B82] text-white border-[#F45B82] shadow-sm'
-                      : 'bg-white text-gray-800 border-gray-200 hover:border-gray-400'
-                      }`}
-                  >
-                    {f.name}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Dietary Preference */}
-            <div className="bg-[#FAF7F5] p-5 rounded-3xl border border-[#EFE4D9] space-y-3">
-              <label className="text-xs font-extrabold uppercase tracking-wider text-[#2B1B17] block">
-                3. Dietary & Ingredient Base:
-              </label>
-              <div className="space-y-2">
-                {dietaryOptions.map((d) => (
-                  <button
-                    key={d.id}
-                    onClick={() => setSelectedDiet(d)}
-                    className={`w-full py-2.5 px-4 rounded-xl text-xs font-bold text-left flex items-center justify-between border transition-all cursor-pointer ${selectedDiet.id === d.id
-                      ? 'bg-[#75DEC0] text-[#12392F] border-[#75DEC0] font-black shadow-sm'
-                      : 'bg-white text-gray-800 border-gray-200 hover:border-gray-400'
-                      }`}
-                  >
-                    <span>{d.label}</span>
-                    <span>{d.extraPrice > 0 ? `+$${d.extraPrice.toFixed(2)}` : 'Included'}</span>
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* 4. DELIVERY SLOT PICKER SECTION */}
-        <section className="bg-white/90 rounded-[36px] p-6 sm:p-10 border border-white/80 shadow-lg">
-          <div className="max-w-3xl mb-8">
-            <span className="text-xs font-black uppercase tracking-widest text-[#F45B82] block mb-1">
-              Delivery Logistics & Slot Picker
-            </span>
-            <h2 className="font-serif text-3xl sm:text-4xl font-extrabold text-[#2B1B17]">
-              Check Pincode & Select Delivery Slot
-            </h2>
-            <p className="text-xs sm:text-sm text-gray-600 mt-1">
-              Enter your area pincode to verify same-day delivery availability and reserve your time window.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-            {/* Pincode & Date Selection */}
-            <div className="lg:col-span-5 space-y-5 bg-[#FAF7F5] p-6 rounded-3xl border border-[#EFE4D9]">
-              <div>
-                <label className="text-xs font-extrabold uppercase tracking-wider text-gray-700 block mb-2">
-                  Enter Delivery Pincode:
-                </label>
-                <div className="relative">
-                  <MapPin className="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-                  <input
-                    type="text"
-                    value={pincode}
-                    onChange={(e) => handlePincodeCheck(e.target.value)}
-                    placeholder="e.g. 560038"
-                    maxLength={6}
-                    className="w-full bg-white border border-gray-300 rounded-xl pl-10 pr-4 py-2.5 text-xs font-bold text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#F45B82]"
-                  />
-                </div>
-                {pincodeStatus && (
-                  <p className="text-xs font-bold text-emerald-700 mt-2 flex items-center gap-1">
-                    <CheckCircle2 className="w-3.5 h-3.5" />
-                    <span>{pincodeStatus}</span>
-                  </p>
-                )}
-              </div>
-
-              <div>
-                <label className="text-xs font-extrabold uppercase tracking-wider text-gray-700 block mb-2">
-                  Select Delivery Date:
-                </label>
-                <div className="grid grid-cols-3 gap-2">
-                  {['Today', 'Tomorrow', 'Day After'].map((date) => (
-                    <button
-                      key={date}
-                      onClick={() => setSelectedDate(date)}
-                      className={`py-2.5 px-3 rounded-xl text-xs font-bold border transition-all cursor-pointer ${selectedDate === date
-                        ? 'bg-[#1C1C1C] text-white border-[#1C1C1C]'
-                        : 'bg-white text-gray-700 border-gray-200 hover:border-gray-400'
-                        }`}
-                    >
-                      {date}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* Time Slot Picker Grid */}
-            <div className="lg:col-span-7 space-y-3">
-              <label className="text-xs font-extrabold uppercase tracking-wider text-gray-700 block">
-                Select Preferred Time Slot:
-              </label>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {deliverySlots.map((slot) => {
-                  const isSelected = selectedSlot.includes(slot.label.split(' ')[0]);
-                  return (
-                    <button
-                      key={slot.id}
-                      onClick={() => setSelectedSlot(`${slot.label} (${slot.time})`)}
-                      className={`p-4 rounded-2xl border text-left flex items-start justify-between transition-all cursor-pointer ${isSelected
-                        ? 'bg-[#FFE8EF] border-[#F45B82] ring-2 ring-[#F45B82]/30 shadow-sm'
-                        : 'bg-white hover:bg-gray-50 border-gray-200'
-                        }`}
-                    >
-                      <div>
-                        <div className="flex items-center gap-2 mb-1">
-                          <Clock className="w-4 h-4 text-[#F45B82]" />
-                          <span className="font-serif font-bold text-sm text-[#2B1B17]">{slot.label}</span>
-                        </div>
-                        <span className="text-xs text-gray-600 font-medium">{slot.time}</span>
-                      </div>
-                      <span className={`text-xs font-black px-2.5 py-1 rounded-full ${slot.fee > 0 ? 'bg-amber-100 text-amber-900' : 'bg-emerald-100 text-emerald-900'
-                        }`}>
-                        {slot.tag}
-                      </span>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* 5. PERSONALIZATION ENGINE SECTION */}
-        <section className="bg-white/90 rounded-[36px] p-6 sm:p-10 border border-white/80 shadow-lg">
-          <div className="max-w-3xl mb-8">
-            <span className="text-xs font-black uppercase tracking-widest text-[#F45B82] block mb-1">
-              Personalized Touch
-            </span>
-            <h2 className="font-serif text-3xl sm:text-4xl font-extrabold text-[#2B1B17]">
-              Inscriptions, Acrylic Toppers & Gift Cards
-            </h2>
-            <p className="text-xs sm:text-sm text-gray-600 mt-1">
-              Add piped message on cake, select premium acrylic toppers, and write custom card notes.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* Piped Message & Gift Note Inputs */}
-            <div className="space-y-5 bg-[#FAF7F5] p-6 rounded-3xl border border-[#EFE4D9]">
-              <div>
-                <label className="text-xs font-extrabold uppercase tracking-wider text-gray-800 block mb-1.5 flex items-center gap-2">
-                  <MessageSquare className="w-4 h-4 text-[#F45B82]" />
-                  <span>Custom Inscription on Cake (Max 40 Chars):</span>
-                </label>
-                <input
-                  type="text"
-                  value={cakeMessage}
-                  onChange={(e) => setCakeMessage(e.target.value)}
-                  placeholder="e.g. Happy 25th Birthday Priya! ❤️"
-                  maxLength={40}
-                  className="w-full bg-white border border-gray-300 rounded-xl px-4 py-2.5 text-xs text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#F45B82]"
-                />
-              </div>
-
-              <div>
-                <label className="text-xs font-extrabold uppercase tracking-wider text-gray-800 block mb-1.5 flex items-center gap-2">
-                  <Gift className="w-4 h-4 text-[#F45B82]" />
-                  <span>Foil-Printed Gift Card Note (Optional):</span>
-                </label>
-                <textarea
-                  value={giftNote}
-                  onChange={(e) => setGiftNote(e.target.value)}
-                  placeholder="Write a warm personalized message to be printed inside the luxury gift card..."
-                  rows={3}
-                  className="w-full bg-white border border-gray-300 rounded-xl p-3 text-xs text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#F45B82]"
-                />
-              </div>
-            </div>
-
-            {/* Acrylic Toppers Picker */}
-            <div className="space-y-3">
-              <label className="text-xs font-extrabold uppercase tracking-wider text-gray-800 block">
-                Select Premium Acrylic Topper:
-              </label>
-              <div className="space-y-2.5">
-                {toppers.map((t) => (
-                  <button
-                    key={t.id}
-                    onClick={() => setSelectedTopper(t.label)}
-                    className={`w-full p-3.5 rounded-2xl border text-left flex items-center justify-between transition-all cursor-pointer ${selectedTopper === t.label
-                      ? 'bg-[#1C1C1C] text-white border-[#1C1C1C] shadow-sm'
-                      : 'bg-white hover:bg-gray-50 border-gray-200 text-gray-800'
-                      }`}
-                  >
-                    <span className="text-xs font-bold">{t.label}</span>
-                    <span className="text-xs font-extrabold">
-                      {t.price > 0 ? `+$${t.price.toFixed(2)}` : 'FREE'}
-                    </span>
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* 6. UPSELLS & CELEBRATION ADD-ONS SECTION */}
+        {/* 5. UPSELLS & CELEBRATION ADD-ONS SECTION */}
         <section className="bg-white/90 rounded-[36px] p-6 sm:p-10 border border-white/80 shadow-lg">
           <div className="max-w-3xl mb-8">
             <span className="text-xs font-black uppercase tracking-widest text-[#F45B82] block mb-1">
@@ -603,10 +803,11 @@ export const About: React.FC = () => {
                 <div
                   key={u.id}
                   onClick={() => toggleUpsell(u.id)}
-                  className={`p-4 rounded-3xl border flex flex-col justify-between cursor-pointer transition-all duration-300 transform hover:-translate-y-1 ${isSelected
-                    ? 'bg-[#FFE8EF] border-[#F45B82] shadow-md ring-2 ring-[#F45B82]/20'
-                    : 'bg-white hover:bg-gray-50 border-gray-200'
-                    }`}
+                  className={`p-4 rounded-3xl border flex flex-col justify-between cursor-pointer transition-all duration-300 transform hover:-translate-y-1 ${
+                    isSelected
+                      ? 'bg-[#FFE8EF] border-[#F45B82] shadow-md ring-2 ring-[#F45B82]/20'
+                      : 'bg-white hover:bg-gray-50 border-gray-200'
+                  }`}
                 >
                   <div>
                     <img
@@ -626,8 +827,9 @@ export const About: React.FC = () => {
                     </span>
                     <button
                       type="button"
-                      className={`w-8 h-8 rounded-full flex items-center justify-center transition-all ${isSelected ? 'bg-[#F45B82] text-white' : 'bg-gray-100 text-gray-700'
-                        }`}
+                      className={`w-8 h-8 rounded-full flex items-center justify-center transition-all ${
+                        isSelected ? 'bg-[#F45B82] text-white' : 'bg-gray-100 text-gray-700'
+                      }`}
                     >
                       {isSelected ? <Check className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
                     </button>
@@ -635,52 +837,6 @@ export const About: React.FC = () => {
                 </div>
               );
             })}
-          </div>
-        </section>
-
-        {/* 7. LIVE SUMMARY & WHATSAPP ORDER CTA */}
-        <section className="bg-[#1C1C1C] text-white rounded-[36px] p-6 sm:p-10 shadow-2xl relative overflow-hidden">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            <div className="lg:col-span-7 space-y-4">
-              <span className="text-xs font-black uppercase tracking-widest text-[#75DEC0] block">
-                Instant Order Summary
-              </span>
-              <h2 className="font-serif text-3xl sm:text-4xl font-extrabold text-white">
-                Ready to Experience Liliyum Artistry?
-              </h2>
-              <div className="space-y-1.5 text-xs sm:text-sm text-gray-300 font-medium pt-2">
-                <p>• <strong>Selection:</strong> {selectedFlavor.name} ({selectedVariant.name})</p>
-                <p>• <strong>Dietary Base:</strong> {selectedDiet.label}</p>
-                <p>• <strong>Slot:</strong> {selectedDate} — {selectedSlot}</p>
-                <p>• <strong>Personalization:</strong> {cakeMessage ? `"${cakeMessage}"` : 'None'}</p>
-                <p>• <strong>Add-ons Selected:</strong> {selectedUpsells.length} Items</p>
-              </div>
-            </div>
-
-            <div className="lg:col-span-5 bg-white/10 backdrop-blur-md p-6 rounded-3xl border border-white/20 flex flex-col items-center text-center space-y-4">
-              <div>
-                <span className="text-xs uppercase font-extrabold tracking-wider text-gray-400 block mb-1">
-                  Calculated Total
-                </span>
-                <span className="font-serif text-4xl sm:text-5xl font-black text-white">
-                  ${totalPrice.toFixed(2)}
-                </span>
-              </div>
-
-              <a
-                href={`https://wa.me/919986350349?text=${whatsappPayload}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full py-4 px-6 rounded-2xl bg-[#75DEC0] hover:bg-[#60ceb0] text-[#12392F] font-bold text-sm sm:text-base flex items-center justify-center gap-2.5 transition-all transform hover:scale-[1.02] shadow-lg cursor-pointer"
-              >
-                <Phone className="w-5 h-5 fill-current" />
-                <span>Confirm & Order via WhatsApp</span>
-              </a>
-
-              <p className="text-[11px] text-gray-400">
-                Direct chef confirmation & temperature-controlled delivery slot.
-              </p>
-            </div>
           </div>
         </section>
 
