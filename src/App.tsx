@@ -6,6 +6,7 @@ import { FloatingActions } from "./components/FloatingActions";
 import { Home } from "./pages/Home";
 import { Collection } from "./pages/Collection";
 import { Product } from "./pages/Product";
+import { About } from "./pages/About";
 
 export const App: React.FC = () => {
   return (<Router>
@@ -16,6 +17,7 @@ export const App: React.FC = () => {
           <Route path="/" element={<Home />} />
           <Route path="/collection" element={<Collection />} />
           <Route path="/product" element={<Product />} />
+          <Route path="/about" element={<About />} />
           {/* <Route path="/product/:id" element={<Product />}/> */}
         </Routes>
       </div>
