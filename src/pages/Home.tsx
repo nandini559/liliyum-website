@@ -10,8 +10,8 @@ export const Home: React.FC = () => {
   return (
     <main>
       <Hero />
-      <CategorySection />
       <BestsellerSection />
+      <CategorySection />
       <LuxurySection />
       <SocialProof />
       <CTASection />

@@ -59,6 +59,10 @@ export const CategorySection: React.FC = () => {
           <h2 className="font-serif text-4xl sm:text-5xl md:text-6xl font-black text-amber-950 tracking-tight">
             Shop by Occasion & Indulgence
           </h2>
+          <p className="text-base sm:text-lg text-[#7A5A4A] max-w-2xl leading-relaxed ml-10">
+            Discover something delicious for every celebration, craving, and sweet
+            little moment.
+          </p>
         </div>
 
         {/* Outer Layout Grid with Vertical Sidebar */}
@@ -92,10 +96,14 @@ export const CategorySection: React.FC = () => {
 
           {/* 4 Equal-Sized Occasion Circles Grid */}
           <div className="flex-1 w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-6 items-start">
-            {categories.map((item) => (
-              <div key={item.id} className="flex flex-col items-center relative group">
-                {/* Equal-sized Circular Image with Curved SVG Text */}
-                <div className="relative flex items-center justify-center my-6">
+            {categories.map((item, index) => (
+              <div
+                key={item.id}
+                className={`flex flex-col items-center relative group ${index % 2 === 1 ? "lg:translate-y-8" : "lg:-translate-y-2"
+                  }`}
+              >
+                {/* Equal-sized Circular Image */}
+                <div className="relative flex items-center justify-center my-4">
                   <Link to={`/collection?category=${item.id}`} className="block relative z-10">
                     <img
                       src={item.image}
@@ -103,22 +111,22 @@ export const CategorySection: React.FC = () => {
                       className="w-52 h-52 sm:w-56 sm:h-56 md:w-60 md:h-60 rounded-full object-cover shadow-2xl border-4 border-white/80 transition-transform duration-500 group-hover:scale-105"
                     />
                   </Link>
-
-                  {/* SVG Curved Text Overlay - Shifted slightly upward */}
-                  <svg
-                    viewBox="0 0 400 400"
-                    className="absolute -top-14 sm:-top-16 w-[280px] h-[280px] sm:w-[310px] sm:h-[310px] md:w-[330px] md:h-[330px] pointer-events-none z-20"
-                  >
-                    <path id={item.curveId} d="M 60,200 A 140,140 0 0,1 340,200" fill="transparent" />
-                    <text className="font-serif text-xl sm:text-2xl md:text-3xl font-black fill-[#2E1D44] tracking-widest uppercase">
-                      <textPath href={`#${item.curveId}`} startOffset="50%" textAnchor="middle">
-                        {item.title}
-                      </textPath>
-                    </text>
-                  </svg>
                 </div>
 
-                {/* Price & Editorial Description (Close to Heading) */}
+                {/* SVG Curved Text - Positioned Completely Underneath the Image */}
+                {/* <svg
+                  viewBox="0 0 400 100"
+                  className="w-[260px] sm:w-[280px] md:w-[300px] h-[60px] sm:h-[70px] -mt-1 mb-2 pointer-events-none shrink-0"
+                >
+                  <path id={item.curveId} d="M 40,15 A 180,180 0 0,0 360,15" fill="transparent" />
+                  <text className="font-serif text-2xl sm:text-3xl font-black fill-[#2E1D44] tracking-widest uppercase">
+                    <textPath href={`#${item.curveId}`} startOffset="50%" textAnchor="middle">
+                      {item.title}
+                    </textPath>
+                  </text>
+                </svg> */}
+
+                {/* Price, Description, and Link Below Curved Text */}
                 <div className="max-w-xs text-center mt-1">
                   <div className="flex items-baseline justify-center gap-2 mb-1">
                     <span className="font-serif text-2xl font-extrabold text-[#2E1D44]">

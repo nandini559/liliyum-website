@@ -4,7 +4,7 @@ import { Phone, ArrowRight, Clock, MapPin } from "lucide-react";
 
 export const CTASection: React.FC = () => {
   return (
-    <section className="py-20 bg-[#FAF0E6] text-[#3B1C10] relative overflow-hidden w-full max-w-full select-none border-t border-[#EFE3DB]">
+    <section className="py-20 bg-amber-100 text-[#3B1C10] relative overflow-hidden w-full max-w-full select-none border-t border-[#EFE3DB]">
       {/* Soft decorative background pastel glow accents */}
       <div className="absolute -right-20 -bottom-20 w-80 h-80 bg-[#A8644A]/10 rounded-full blur-3xl pointer-events-none max-w-full" />
       <div className="absolute -left-20 -top-20 w-80 h-80 bg-[#D4A373]/15 rounded-full blur-3xl pointer-events-none max-w-full" />
@@ -24,7 +24,7 @@ export const CTASection: React.FC = () => {
             to="/collection"
             className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#A8644A] hover:bg-[#8C4A32] text-white px-8 py-4 rounded-2xl font-bold text-sm shadow-xl transition-all duration-300 transform hover:-translate-y-0.5"
           >
-            <span>Order Online Now</span>
+            <span>Order Now</span>
             <ArrowRight className="w-4 h-4" />
           </Link>
 
@@ -35,7 +35,7 @@ export const CTASection: React.FC = () => {
             className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 bg-white hover:bg-white/80 text-[#3B1C10] border border-[#E7D6CB] px-4 sm:px-7 py-4 rounded-2xl font-semibold text-xs sm:text-sm shadow-sm transition-all duration-300 max-w-full"
           >
             <Phone className="w-4 h-4 text-[#A8644A] shrink-0" />
-            <span>WhatsApp (+91 99863 50349)</span>
+            <span>WhatsApp </span>
           </a>
         </div>
 
