@@ -212,7 +212,7 @@ export const About: React.FC = () => {
     }
   ];
 
-  const [activeCafeCategory, setActiveCafeCategory] = useState<string>("All Ambience");
+  const [activeCafeCategory] = useState<string>("All Ambience");
   const [selectedLightboxImage, setSelectedLightboxImage] = useState < CafeGalleryItem | null > (null);
 
   const filteredCafeGallery = activeCafeCategory === "All Ambience"
