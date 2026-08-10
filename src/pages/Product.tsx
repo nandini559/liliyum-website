@@ -27,19 +27,19 @@ export const Product: React.FC = () => {
   return (
     <main className="py-8 bg-[#FAF7F5] min-h-screen w-full max-w-full overflow-x-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-16">
-        
+
         {/* Breadcrumbs */}
         <nav className="flex items-center gap-1.5 sm:gap-2 text-xs text-[#7A6760] mb-6 flex-wrap max-w-full">
           <Link to="/" className="hover:text-[#A8644A] transition-colors">Home</Link>
           <ChevronRight className="w-3.5 h-3.5 shrink-0" />
-          <Link to="/collection" className="hover:text-[#A8644A] transition-colors">Collection</Link>
+          <Link to="/menu" className="hover:text-[#A8644A] transition-colors">Collection</Link>
           <ChevronRight className="w-3.5 h-3.5 shrink-0" />
           <span className="text-[#2D2422] font-semibold truncate max-w-[200px]">{product.name}</span>
         </nav>
 
         {/* Main Product Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 mb-16 items-start w-full">
-          
+
           {/* Left Column: Image Gallery */}
           <div className="lg:col-span-6 w-full max-w-full">
             <ProductGallery images={product.gallery} productName={product.name} />
@@ -65,7 +65,7 @@ export const Product: React.FC = () => {
 
           {/* Right Column: Details & Ordering */}
           <div className="lg:col-span-6 space-y-6 w-full max-w-full">
-            
+
             {/* Header info */}
             <div>
               <div className="flex items-center gap-2 mb-2">
@@ -125,11 +125,10 @@ export const Product: React.FC = () => {
                     <button
                       key={variant.id}
                       onClick={() => setSelectedVariant(variant)}
-                      className={`px-4 py-2.5 rounded-xl text-xs font-semibold border transition-all cursor-pointer ${
-                        selectedVariant.id === variant.id
+                      className={`px-4 py-2.5 rounded-xl text-xs font-semibold border transition-all cursor-pointer ${selectedVariant.id === variant.id
                           ? 'bg-[#2D2422] text-[#EAD5BE] border-[#2D2422] shadow-sm ring-2 ring-[#2D2422]/20'
                           : 'bg-white text-[#594943] border-[#E7D6CB] hover:border-[#A8644A]'
-                      }`}
+                        }`}
                     >
                       <span>{variant.name}</span>
                       <span className="ml-2 opacity-80">• ${variant.price.toFixed(2)}</span>
