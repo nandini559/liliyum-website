@@ -47,15 +47,15 @@ export const LuxurySection: React.FC = () => {
       <section className="py-16 sm:py-24 bg-amber-200 text-[#3B1C10] w-full max-w-full overflow-hidden relative select-none border-t border-[#EAE0D5]">
         {/* Background Subtle Milk Splash Graphic */}
         <div className="absolute top-0 right-0 w-96 h-96 opacity-15 pointer-events-none z-0">
-          <svg viewBox="0 0 200 200" className="w-full h-full fill-[#3B1C10]">
+          {/* <svg viewBox="0 0 200 200" className="w-full h-full fill-[#3B1C10]">
             <path d="M45,-60C58,-52,67,-37,71,-20C75,-3,74,16,66,32C58,48,43,61,25,68C7,75,-14,76,-32,70C-50,64,-65,51,-72,34C-79,17,-78,-4,-71,-22C-64,-40,-51,-55,-36,-64C-21,-73,-4,-76,14,-74C32,-72,32,-68,45,-60Z" transform="translate(100 100)" />
-          </svg>
+          </svg> */}
         </div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10">
           {/* Main Section Header */}
           <h2 className="font-serif text-4xl sm:text-5xl md:text-6xl font-black text-[#3B1C10] tracking-tight text-center mb-8">
-            Royal Belgian Collection
+            Shop Our Royal Collection
           </h2>
 
           {/* Filter Pills Row */}
@@ -99,9 +99,9 @@ export const LuxurySection: React.FC = () => {
             </div>
 
             {/* Right Side: Tall Showcase Card (5 Cols) */}
-            <div className="lg:col-span-5 flex flex-col group h-full">
+            {/* <div className="lg:col-span-5 flex flex-col group h-full">
               <Link to={`/product/${tallRightCard.id}`} className="block overflow-hidden rounded-2xl mb-3 shadow-md group-hover:shadow-lg transition-all flex-grow">
-                <img src={tallRightCard.image} alt={tallRightCard.name} className="w-full h-[460px] sm:h-[540px] lg:h-[570px] object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ8PCb5sf6ZQGUqbhQdBpLGcE1fgboH3EADHH4H3TEsuA&s=10" alt={tallRightCard.name} className="w-full h-[460px] sm:h-[540px] lg:h-[570px] object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
               </Link>
 
               <div className="flex items-center justify-between px-1">
@@ -117,7 +117,7 @@ export const LuxurySection: React.FC = () => {
                   </span>
                 </span>
               </div>
-            </div>
+            </div> */}
           </div>
 
           {/* View Full Collection CTA */}

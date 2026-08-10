@@ -51,6 +51,12 @@ export const CategorySection: React.FC = () => {
   ];
 
   return (
+
+
+
+
+
+
     <section className="py-16 sm:py-24 bg-amber-100 text-amber-950 w-full max-w-full overflow-hidden relative select-none">
       {/* Main Container */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10">

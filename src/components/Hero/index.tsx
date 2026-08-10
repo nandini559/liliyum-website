@@ -8,9 +8,9 @@ export const Hero: React.FC = () => {
   const [selectedPack, setSelectedPack] = useState("pack-6");
   const navigate = useNavigate();
   return (
-    <section className="relative w-full max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-6 select-none">
+    <section className="relative w-full   sm:py-6 select-none">
       {/* Warm Rounded Card Container matching Reference Design */}
-      <div className="relative w-full min-h-[580px] sm:min-h-[640px] lg:min-h-[680px] bg-[#EBE0D0] text-[#3D1E16] rounded-3xl sm:rounded-[2.5rem] lg:rounded-[3rem] overflow-hidden px-6 sm:px-12 lg:px-16 py-12 lg:py-16 flex items-center justify-between shadow-sm">
+      <div className="relative w-full min-h-[580px] sm:min-h-[640px] lg:min-h-[680px] bg-amber-100 text-[#3D1E16] overflow-hidden px-6 sm:px-12 lg:px-16 py-12 lg:py-16 flex items-center justify-between">
 
         {/* Organic Background Blobs */}
         <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">

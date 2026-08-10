@@ -31,176 +31,136 @@ interface CafeGalleryItem {
 }
 
 /* -------------------------------------------------------------------------- */
-/* CARDWISE CAFE GALLERY CAROUSEL COMPONENT */
+/* CARDWISE CAFE GALLERY GRID COMPONENT */
 /* -------------------------------------------------------------------------- */
-const CafeCardCarousel: React.FC<{
+const CafeCardGallery: React.FC<{
   items: CafeGalleryItem[];
   activeCategory: string;
   setActiveCategory: (cat: string) => void;
   onOpenLightbox: (item: CafeGalleryItem) => void;
   onOpenOrderModal: () => void;
 }> = ({ items, activeCategory, setActiveCategory, onOpenLightbox, onOpenOrderModal }) => {
-  const [currentIndex, setCurrentIndex] = useState(0);
-
   const categories = ["All Ambience", "Barista & Coffee", "Artisan Kitchen", "Patisserie Display", "Cozy Patio"];
+  const navigate = useNavigate();
 
-  const prevSlide = () => {
-    setCurrentIndex(
-      (prev) => prev === 0
-        ? Math.max(0, items.length - 1)
-        : prev - 1);
-  };
+  return (
+    <section className="bg-amber-200 rounded-[36px] p-6 sm:p-10 border border-white/80 shadow-xl relative overflow-hidden">
+      {/* Header Controls & Filter Tabs */}
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 mb-8">
+        <div>
+          <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#2B1B17] text-center">
+            Liliyum Cafe & Gallery
+          </h2>
+        </div>
 
-  const nextSlide = () => {
-    setCurrentIndex((prev) => (
-      prev >= items.length - 1
-        ? 0
-        : prev + 1));
-  };
-
-  const safeIndex = Math.min(currentIndex, Math.max(0, items.length - 1));
-  const currentItem = items[safeIndex] || items[0];
-
-  return (<section className="bg-white/90 rounded-[36px] p-6 sm:p-10 border border-white/80 shadow-xl relative overflow-hidden">
-    {/* Header Controls & Filter Tabs */}
-    <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 mb-8">
-      <div>
-        {/* <div className="flex items-center gap-2 mb-2">
-            <span className="text-xs font-serif italic font-bold tracking-widest uppercase text-[#E88B2A] bg-[#FFF0E2] px-3 py-1 rounded-full border border-[#FAD6B5]">
-              Experience Liliyum Cafe
-            </span>
-            <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-700 bg-emerald-100 px-2.5 py-1 rounded-full flex items-center gap-1">
-              <Sparkles className="w-3 h-3" /> Cardwise Carousel
-            </span>
-          </div> */
-        }
-        <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#2B1B17]">
-          Patisserie Cafe & Kitchen Gallery
-        </h2>
+        {/* Category Filters */}
+        {/* <div className="flex items-center gap-2 overflow-x-auto pb-2 no-scrollbar">
+          {categories.map((cat) => (
+            <button
+              key={cat}
+              type="button"
+              onClick={() => setActiveCategory(cat)}
+              className={`px-4 py-2 rounded-full text-xs font-extrabold transition-all duration-300 cursor-pointer whitespace-nowrap ${
+                activeCategory === cat
+                  ? "bg-[#2B1B17] text-[#EAD5BE] shadow-md scale-105"
+                  : "bg-[#FAF7F5] text-[#594943] border border-[#E7D6CB] hover:bg-white"
+              }`}
+            >
+              {cat}
+            </button>
+          ))}
+        </div> */}
       </div>
 
-      {/* Category Filters */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-2 no-scrollbar">
-        {
-          categories.map((cat) => (<button key={cat} type="button" onClick={() => {
-            setActiveCategory(cat);
-            setCurrentIndex(0);
-          }} className={`px-4 py-2 rounded-full text-xs font-extrabold transition-all duration-300 cursor-pointer whitespace-nowrap ${activeCategory === cat
-            ? "bg-[#2B1B17] text-[#EAD5BE] shadow-md scale-105"
-            : "bg-[#FAF7F5] text-[#594943] border border-[#E7D6CB] hover:bg-white"}`}>
-            {cat}
-          </button>))
-        }
-      </div>
-    </div>
+      {/* Cards Grid */}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={activeCategory}
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -15 }}
+          transition={{ duration: 0.3 }}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8"
+        >
+          {items.map((item, index) => (
+            <motion.div
+              key={item.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: index * 0.05 }}
+              className="bg-[#FAF7F5] rounded-3xl p-5 sm:p-6 border border-[#E7D6CB] shadow-lg flex flex-col justify-between group hover:shadow-xl transition-all duration-300"
+            >
+              <div>
+                {/* Image Section */}
+                <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-md bg-black mb-4 border border-white/40">
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                  />
+                  {/* Badges */}
+                  <div className="absolute top-3 left-3 right-3 flex items-center justify-between pointer-events-none gap-2">
+                    {/* <span className="bg-black/70 backdrop-blur-md text-white font-extrabold text-[10px] uppercase tracking-wider px-2.5 py-1 rounded-full border border-white/20 shadow-sm truncate">
+                      {item.badge}
+                    </span> */}
+                    <span className="bg-white/95 backdrop-blur-md text-[#2B1B17] font-bold text-[10px] px-2.5 py-1 rounded-full flex items-center gap-1 shadow-sm shrink-0">
+                      <MapPin className="w-3.5 h-3.5 text-[#E88B2A]" />
+                      {item.location}
+                    </span>
+                  </div>
 
-    {/* Carousel Wrapper with Cards Track */}
-    {
-      items.length > 0 && currentItem && (<div className="relative">
-        {/* Main Focused Card Carousel Frame */}
-        <div className="relative overflow-hidden py-2 min-h-[420px] sm:min-h-[460px]">
-          <AnimatePresence mode="wait">
-            <motion.div key={currentItem.id} initial={{
-              opacity: 0,
-              x: 50,
-              scale: 0.98
-            }} animate={{
-              opacity: 1,
-              x: 0,
-              scale: 1
-            }} exit={{
-              opacity: 0,
-              x: -50,
-              scale: 0.98
-            }} transition={{
-              duration: 0.45,
-              ease: "easeOut"
-            }} className="bg-[#FAF7F5] rounded-3xl p-6 sm:p-8 border border-[#E7D6CB] shadow-xl flex flex-col lg:flex-row items-center justify-between gap-8">
-              {/* Left Card Image */}
-              <div className="w-full lg:w-1/2 aspect-[4/3] sm:aspect-[16/10] lg:aspect-[4/3] relative rounded-2xl overflow-hidden shadow-2xl bg-black group border border-white/40">
-                <img src={currentItem.image} alt={currentItem.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" /> {/* Badges */}
-                <div className="absolute top-4 left-4 right-4 flex items-center justify-between pointer-events-none">
-                  <span className="bg-black/70 backdrop-blur-md text-white font-extrabold text-[10px] sm:text-xs uppercase tracking-wider px-3.5 py-1.5 rounded-full border border-white/20 shadow-md">
-                    {currentItem.badge}
-                  </span>
-                  <span className="bg-white/95 backdrop-blur-md text-[#2B1B17] font-bold text-[10px] sm:text-xs px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-md">
-                    <MapPin className="w-3.5 h-3.5 text-[#E88B2A]" />{" "}
-                    {currentItem.location}
-                  </span>
+                  {/* Lightbox Enlarge Trigger */}
+                  {/* <button
+                    type="button"
+                    onClick={() => onOpenLightbox(item)}
+                    className="absolute bottom-3 right-3 bg-white/90 hover:bg-white text-[#2B1B17] p-2 sm:px-3 sm:py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-md transition-all transform hover:scale-105 cursor-pointer z-10"
+                  >
+                    <ZoomIn className="w-3.5 h-3.5 text-[#E88B2A]" />
+                    <span className="hidden sm:inline">Enlarge</span>
+                  </button> */}
                 </div>
 
-                {/* Lightbox Enlarge Trigger */}
-                <button type="button" onClick={() => onOpenLightbox(currentItem)} className="absolute bottom-4 right-4 bg-white/90 hover:bg-white text-[#2B1B17] px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-lg transition-all transform hover:scale-105 cursor-pointer z-10">
-                  <ZoomIn className="w-4 h-4 text-[#E88B2A]" />
-                  <span className="hidden sm:inline">Enlarge Preview</span>
+                {/* Info Section */}
+                <div className="space-y-2">
+                  {/* <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-widest text-[#E88B2A] bg-[#FFF0E2] px-2.5 py-0.5 rounded-full border border-[#FAD6B5] inline-block">
+                    {item.category}
+                  </span> */}
+
+                  <h3 className="font-serif font-extrabold text-lg sm:text-xl text-[#2B1B17] leading-snug line-clamp-2">
+                    {item.title}
+                  </h3>
+
+                  <p className="text-xs sm:text-sm text-[#6E554C] font-medium leading-relaxed">
+                    {item.desc}
+                  </p>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="pt-4 mt-4 border-t border-[#E7D6CB]/60 flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => navigate("/menu")}
+                  className="flex-1 py-2.5 px-3 rounded-full bg-[#E88B2A] hover:bg-[#D4791E] text-white font-bold text-xs shadow-sm transition-all cursor-pointer flex items-center justify-center gap-1.5 transform hover:scale-[1.02]"
+                >
+                  <span>Experience Cafe</span>
+                  <ArrowUpRight className="w-3.5 h-3.5" />
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => navigate("/")}
+                  className="py-2.5 px-3 rounded-full bg-white hover:bg-gray-50 text-[#2B1B17] border border-[#E7D6CB] font-bold text-xs transition-colors cursor-pointer whitespace-nowrap"
+                >
+                  Details
                 </button>
               </div>
-
-              {/* Right Card Content */}
-              <div className="w-full lg:w-1/2 space-y-4 text-[#2B1B17]">
-                <div className="flex items-center gap-2">
-                  <span className="text-[11px] sm:text-xs font-bold uppercase tracking-widest text-[#E88B2A] bg-[#FFF0E2] px-3 py-1 rounded-full border border-[#FAD6B5]">
-                    {currentItem.category}
-                  </span>
-                  <span className="text-[11px] font-semibold text-gray-400">
-                    Card 0{safeIndex + 1}
-                    of 0{items.length}
-                  </span>
-                </div>
-
-                <h3 className="font-serif font-extrabold text-2xl sm:text-3xl md:text-4xl text-[#2B1B17] leading-tight">
-                  {currentItem.title}
-                </h3>
-
-                <p className="text-xs sm:text-sm text-[#6E554C] font-medium leading-relaxed">
-                  {currentItem.desc}
-                </p>
-
-                <div className="pt-3 flex flex-wrap items-center gap-3">
-                  <button type="button" onClick={onOpenOrderModal} className="px-6 py-3 rounded-full bg-[#E88B2A] hover:bg-[#D4791E] text-white font-bold text-xs sm:text-sm shadow-md transition-all cursor-pointer transform hover:scale-105 flex items-center gap-2">
-                    <span>Experience Cafe & Order</span>
-                    <ArrowUpRight className="w-4 h-4" />
-                  </button>
-
-                  <button type="button" onClick={() => onOpenLightbox(currentItem)} className="px-4 py-3 rounded-full bg-white hover:bg-gray-50 text-[#2B1B17] border border-[#E7D6CB] font-bold text-xs transition-colors cursor-pointer">
-                    View Details
-                  </button>
-                </div>
-              </div>
             </motion.div>
-          </AnimatePresence>
-        </div>
-
-        {/* Carousel Navigation Buttons & Indicators */}
-        <div className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-[#E7D6CB]/40">
-          {/* Dots */}
-          <div className="flex items-center gap-2">
-            {
-              items.map((it, idx) => (<button key={it.id} type="button" onClick={() => setCurrentIndex(idx)} className={`h-2.5 rounded-full transition-all duration-300 cursor-pointer ${safeIndex === idx
-                ? "w-8 bg-[#E88B2A]"
-                : "w-2.5 bg-[#E88B2A]/30 hover:bg-[#E88B2A]/60"}`} aria-label={`Go to slide ${idx + 1}`} />))
-            }
-          </div>
-
-          {/* Left / Right Arrow Buttons */}
-          <div className="flex items-center gap-3">
-            <button type="button" onClick={prevSlide} className="w-10 h-10 rounded-full bg-[#FAF7F5] hover:bg-[#2B1B17] text-[#2B1B17] hover:text-[#EAD5BE] border border-[#E7D6CB] flex items-center justify-center transition-all cursor-pointer shadow-sm" aria-label="Previous Slide">
-              <ChevronLeft className="w-5 h-5" />
-            </button>
-
-            <span className="text-xs font-bold text-[#2B1B17] px-2">
-              0{safeIndex + 1}
-              / 0{items.length}
-            </span>
-
-            <button type="button" onClick={nextSlide} className="w-10 h-10 rounded-full bg-[#FAF7F5] hover:bg-[#2B1B17] text-[#2B1B17] hover:text-[#EAD5BE] border border-[#E7D6CB] flex items-center justify-center transition-all cursor-pointer shadow-sm" aria-label="Next Slide">
-              <ChevronRight className="w-5 h-5" />
-            </button>
-          </div>
-        </div>
-      </div>)
-    }
-  </section>);
+          ))}
+        </motion.div>
+      </AnimatePresence>
+    </section >
+  );
 };
 
 /* -------------------------------------------------------------------------- */
@@ -213,17 +173,17 @@ export const About: React.FC = () => {
   const cafeGalleryItems: CafeGalleryItem[] = [
     {
       id: "cg1",
-      title: "Artisan Barista & Coffee Bar",
+      title: "Reception Area",
       category: "Barista & Coffee",
-      image: "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?q=80&w=1000&auto=format&fit=crop",
-      badge: "Live Espresso",
+      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCwDWh_B9qn1ETbwacXuFTP0hnP2Aa7rImbzXoa_RxUQ&s=10",
+      badge: "Live Baking",
       desc: "Single-origin Ethiopian beans pulled fresh by our master baristas.",
-      location: "Main Bar"
+      location: "Main Entrance"
     }, {
       id: "cg2",
       title: "French Pastry Baking Kitchen",
       category: "Artisan Kitchen",
-      image: "https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=1000&auto=format&fit=crop",
+      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQe7iQPcVZS_xPT-3_MPhn0OoZbpcs8ck6kn2W3qnRVTw&s=10",
       badge: "Fresh Batch",
       desc: "Laminated croissant dough resting before 6 AM morning bake.",
       location: "Bake House"
@@ -239,7 +199,7 @@ export const About: React.FC = () => {
       id: "cg4",
       title: "Sunlit Outdoor Botanical Patio",
       category: "Cozy Patio",
-      image: "https://images.unsplash.com/photo-1554118811-1e0d58224f24?q=80&w=1000&auto=format&fit=crop",
+      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR4kn54TU_B505uYgeyOJRfAM8RveuhplZNnEZNvjIYwQ&s=10",
       badge: "Al-Fresco",
       desc: "Lush greenery and cozy rattan seating for peaceful afternoon high tea.",
       location: "Garden Patio"
@@ -247,7 +207,7 @@ export const About: React.FC = () => {
       id: "cg5",
       title: "70% Dark Chocolate Ganache Tempering",
       category: "Artisan Kitchen",
-      image: "https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?q=80&w=1000&auto=format&fit=crop",
+      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRoHQTM0wf3ragRhquqCb8f10V0Tn2kWQ9rZHgOVB0iCQ&s=10",
       badge: "Chef Craft",
       desc: "Hand-tempering Belgian dark chocolate for signature cake toppings.",
       location: "Chocolatier Station"
@@ -255,7 +215,7 @@ export const About: React.FC = () => {
       id: "cg6",
       title: "Cozy Evening Lounge & Reading Nook",
       category: "Cozy Patio",
-      image: "https://images.unsplash.com/photo-1442512595331-e89e73853f31?q=80&w=1000&auto=format&fit=crop",
+      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSp9dJkFSi2mO9NuA2IfEOmDxQQab-dCGwFAFp_o9Ipmw&s=10",
       badge: "Warm Ambience",
       desc: "Soft ambient lighting and vintage velvet seating for relaxed coffee dates.",
       location: "Lounge"
@@ -392,7 +352,7 @@ export const About: React.FC = () => {
           </p>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 mt-10 text-left">
-            <div className="bg-blue-300 p-5 rounded-3xl border border-white/60 shadow-sm flex flex-col items-center text-center hover:shadow-md transition-shadow">
+            <div className="bg-blue-100 p-5 rounded-3xl border border-white/60 shadow-sm flex flex-col items-center text-center hover:shadow-md transition-shadow">
               <ShieldCheck className="w-8 h-8 text-pink-500 mb-2" />
               <h4 className="font-serif font-extrabold text-[#2B1B17] text-base">
                 100% Fresh Daily
@@ -401,8 +361,8 @@ export const About: React.FC = () => {
                 Baked on the date of delivery
               </p>
             </div>
-            <div className="bg-pink-300 p-5 rounded-3xl border border-white/60 shadow-sm flex flex-col items-center text-center hover:shadow-md transition-shadow">
-              <Award className="w-8 h-8 text-[#FFD363] mb-2" />
+            <div className="bg-pink-200 p-5 rounded-3xl border border-white/60 shadow-sm flex flex-col items-center text-center hover:shadow-md transition-shadow">
+              <Award className="w-8 h-8 text-blue-300 mb-2" />
               <h4 className="font-serif font-extrabold text-[#2B1B17] text-base">
                 Belgian Cocoa
               </h4>
@@ -410,7 +370,7 @@ export const About: React.FC = () => {
                 70% single-origin cocoa
               </p>
             </div>
-            <div className="bg-yellow-300 p-5 rounded-3xl  border-white/60 shadow-sm flex flex-col items-center text-center hover:shadow-md transition-shadow">
+            <div className="bg-yellow-200 p-5 rounded-3xl  border-white/60 shadow-sm flex flex-col items-center text-center hover:shadow-md transition-shadow">
               <Truck className="w-8 h-8 text-[#F45B82] mb-2" />
               <h4 className="font-serif font-extrabold text-[#2B1B17] text-base">
                 Same-Day Slots
@@ -419,7 +379,7 @@ export const About: React.FC = () => {
                 Temperature-controlled vans
               </p>
             </div>
-            <div className="bg-green-300 p-5 rounded-3xl border border-white/60 shadow-sm flex flex-col items-center text-center hover:shadow-md transition-shadow">
+            <div className="bg-green-200 p-5 rounded-3xl border border-white/60 shadow-sm flex flex-col items-center text-center hover:shadow-md transition-shadow">
               <Heart className="w-8 h-8 text-rose-500 mb-2" />
               <h4 className="font-serif font-extrabold text-[#2B1B17] text-base">
                 Custom Made
@@ -501,203 +461,9 @@ export const About: React.FC = () => {
       </section>
 
 
-      {/* 2. "SHOP BY CATEGORY" BENTO GRID SECTION */}
-      <section className="relative w-full">
-        <div className="text-center mb-8 sm:mb-12">
-          {/* <span className="font-serif italic font-bold text-2xl sm:text-3xl text-[#E88B2A] block mb-1">
-              Which One
-            </span> */
-          }
-          <h2 className="font-sans font-extrabold text-3xl sm:text-4xl md:text-5xl text-[#1C1C1C] tracking-tight">
-            Shop By Category
-          </h2>
-        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-5 sm:gap-6 relative">
-          <motion.div initial={{
-            opacity: 0,
-            y: 25
-          }} whileInView={{
-            opacity: 1,
-            y: 0
-          }} viewport={{
-            once: true
-          }} transition={{
-            duration: 0.5
-          }} className="md:col-span-8 bg-amber-800 rounded-[28px] sm:rounded-[36px] overflow-hidden p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl border border-black/20 group relative min-h-[300px]">
-            <div className="w-full sm:w-1/2 h-56 sm:h-full relative overflow-hidden rounded-2xl">
-              <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpT4MoVKnDvcXoZKGWWvmE69pLRcQ9pL6rMzcjbsdoNw&s=10" alt="Local Donuts & Coffee" className="w-full h-full object-cover rounded-2xl group-hover:scale-105 transition-transform duration-700 ease-out" />
-            </div>
-
-            <div className="w-full sm:w-1/2 text-white space-y-3 z-10">
-              {/* <span className="font-serif italic font-semibold text-xl text-[#F0993D] block">
-                Coffee
-              </span> */}
-              <h3 className="font-sans font-extrabold text-2xl sm:text-3xl tracking-tight text-white leading-snug">
-                Fruit & Nut Goodness
-              </h3>
-              <p className="text-xs sm:text-sm text-gray-300 font-normal leading-relaxed">
-                Fruity flavours paired with our signature glaze-dipped signature pastries baked fresh daily.
-              </p>
-              <div className="pt-2">
-                <button type="button" onClick={() => navigate("/menu")} className="px-6 py-2.5 rounded-full bg-[#E88B2A] hover:bg-[#D4791E] text-white font-bold text-xs sm:text-sm transition-all shadow-md cursor-pointer transform hover:scale-105 inline-flex items-center gap-2">
-                  <span>Browse Shop</span>
-                  <ChevronRight className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-          </motion.div>
-
-          <motion.div initial={{
-            opacity: 0,
-            y: 25
-          }} whileInView={{
-            opacity: 1,
-            y: 0
-          }} viewport={{
-            once: true
-          }} transition={{
-            duration: 0.5,
-            delay: 0.1
-          }} className="md:col-span-4 bg-amber-300 rounded-[28px] sm:rounded-[36px] p-6 sm:p-8 flex flex-col items-center justify-center text-center shadow-md border border-[#E6DEC3]/60 group relative overflow-hidden min-h-[300px]">
-            <div className="relative z-10 space-y-2 flex flex-col items-center">
-              <div className="relative mb-2">
-                <img src="https://images.unsplash.com/photo-1576618148400-f54bed99fcfd?q=80&w=400&auto=format&fit=crop" alt="Homemade Cupcake" className="w-28 h-28 sm:w-32 sm:h-32 object-cover rounded-full border-4 border-white shadow-lg group-hover:scale-110 transition-transform duration-500" />
-                <span className="absolute -bottom-1 -right-1 bg-[#E88B2A] text-white text-[10px] font-serif italic px-2 py-0.5 rounded-full shadow-xs">
-                  Bakery Fresh
-                </span>
-              </div>
-              <h4 className="font-serif italic font-bold text-2xl text-white leading-tight">
-                home made cupcake
-              </h4>
-              <p className="text-xs text-white font-medium max-w-[200px]">
-                Fluffy Madagascar vanilla sponge topped with Belgian buttercream swirl.
-              </p>
-              <button type="button" onClick={() => navigate("/menu")} className="mt-3 text-xs font-extrabold text-[#E88B2A] hover:underline cursor-pointer">
-                Order Cupcake Boxes →
-              </button>
-            </div>
-          </motion.div>
-
-          <motion.div initial={{
-            opacity: 0,
-            y: 25
-          }} whileInView={{
-            opacity: 1,
-            y: 0
-          }} viewport={{
-            once: true
-          }} transition={{
-            duration: 0.5,
-            delay: 0.2
-          }} className="md:col-span-4 bg-amber-950 rounded-[28px] sm:rounded-[36px] p-6 sm:p-8 text-white flex flex-col justify-between shadow-xl border border-black/20 group relative overflow-hidden min-h-[380px]">
-            <div className="space-y-3 z-10">
-              {/* <span className="font-serif italic font-semibold text-xl text-[#F0993D] block">
-                Breakfast
-              </span> */}
-              <h3 className="font-sans font-extrabold text-2xl sm:text-3xl tracking-tight text-white leading-tight">
-                Chocolate Cake
-              </h3>
-              <p className="text-xs text-gray-300 leading-relaxed">
-                Rich 70% dark cocoa layer cake topped with silken chocolate ganache and roasted hazelnuts.
-              </p>
-              {/* <div className="pt-2">
-                <button type="button" onClick={() => navigate("/menu")} className="px-6 py-2.5 rounded-full bg-[#E88B2A] hover:bg-[#D4791E] text-white font-bold text-xs transition-all shadow-md cursor-pointer transform hover:scale-105 inline-flex items-center gap-2">
-                  <span>Browse Shop</span>
-                  <ChevronRight className="w-4 h-4" />
-                </button>
-              </div> */}
-            </div>
-            <button type="button" onClick={() => navigate("/menu")} className="mt-3 text-xs font-extrabold text-white hover:underline cursor-pointer text-left">
-              Order Cupcake Boxes →
-            </button>
-            <div className="mt-6 relative h-40 w-full overflow-hidden rounded-2xl ">
-              <img src="https://images.unsplash.com/photo-1606313564200-e75d5e30476c?q=80&w=800&auto=format&fit=crop" alt="Chocolate Ganache & Cocoa" className="w-full h-full object-cover rounded-2xl group-hover:scale-105 transition-transform duration-700" />
-            </div>
-          </motion.div>
-
-
-          <motion.div initial={{
-            opacity: 0,
-            y: 25
-          }} whileInView={{
-            opacity: 1,
-            y: 0
-          }} viewport={{
-            once: true
-          }} transition={{
-            duration: 0.5,
-            delay: 0.3
-          }} className="md:col-span-4 bg-green-300 rounded-[28px] sm:rounded-[36px] p-6 sm:p-8 flex flex-col justify-between shadow-md border border-[#E6DEC3]/60 group relative overflow-hidden min-h-[340px]">
-            <div >
-
-              <h4 className="font-sans font-extrabold text-4xl text-white">
-                Macarons
-              </h4>
-              <p className="text-xs text-white mt-1">
-                French almond meringue shells filled with raspberry, pistachio & chocolate ganache.
-              </p>
-              {/* <div className="pt-2 mt-6">
-                <button type="button" onClick={() => navigate("/menu")} className="px-6 py-2.5 rounded-full bg-[#E88B2A] hover:bg-[#D4791E] text-white font-bold text-xs transition-all shadow-md cursor-pointer transform hover:scale-105 inline-flex items-center gap-2">
-                  <span>Browse Shop</span>
-                  <ChevronRight className="w-4 h-4" />
-                </button>
-              </div> */}
-            </div>
-            <button type="button" onClick={() => navigate("/menu")} className="mt-3 text-xs font-extrabold text-white hover:underline cursor-pointer text-left">
-              Order Cupcake Boxes →
-            </button>
-            <div className="mt-1 relative h-44 w-full overflow-hidden rounded-2xl">
-              <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDbLtLMeLg27grCqApfPd7Wpt-JVUaq5NmTKNaBD4n7g&s=10" />
-            </div>
-          </motion.div>
-
-
-          <motion.div initial={{
-            opacity: 0,
-            y: 25
-          }} whileInView={{
-            opacity: 1,
-            y: 0
-          }} viewport={{
-            once: true
-          }} transition={{
-            duration: 0.5,
-            delay: 0.4
-          }} className="md:col-span-4 bg-amber-500 rounded-[28px] sm:rounded-[36px] p-6 sm:p-8 flex flex-col justify-between shadow-lg border border-gray-100 group relative overflow-hidden min-h-[340px]">
-            <div>
-              {/* <span className="font-serif italic font-semibold text-xl text-[#E88B2A] block mb-1">
-                Which One
-              </span> */}
-              <h4 className="font-sans font-extrabold text-3xl text-white">
-                Choco Croissant
-              </h4>
-              <p className="text-xs text-white mt-1">
-                Flaky butter croissants filled with dark chocolate ganache and amarena cherry glaze.
-              </p>
-              {/* <div className="pt-2 mt-6">
-                <button type="button" onClick={() => navigate("/menu")} className="px-6 py-2.5 rounded-full bg-[#E88B2A] hover:bg-[#D4791E] text-white font-bold text-xs transition-all shadow-md cursor-pointer transform hover:scale-105 inline-flex items-center gap-2">
-                  <span>Browse Shop</span>
-                  <ChevronRight className="w-4 h-4" />
-                </button>
-              </div> */}
-            </div>
-            <button type="button" onClick={() => navigate("/menu")} className="mt-3 text-xs font-extrabold text-white hover:underline cursor-pointer text-left">
-              Order Cupcake Boxes →
-            </button>
-            <div className="mt-4 relative h-44 w-full overflow-hidden rounded-2xl">
-              <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6SpNGWq1Cv_-v-Dvmd4x8RXxUyUUkL_dU0DlWMerLtQ&s=10" alt="Choco Cherry Croissants" className="w-full h-full object-cover rounded-2xl group-hover:scale-105 transition-transform duration-500" />
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-
-
-
-
-      {/* 3. CARDWISE CAFE GALLERY CAROUSEL SECTION */}
-      <CafeCardCarousel items={filteredCafeGallery} activeCategory={activeCafeCategory} setActiveCategory={setActiveCafeCategory} onOpenLightbox={item => setSelectedLightboxImage(item)} onOpenOrderModal={openOrderModal} /> {/* Interactive Lightbox Motion Modal */}
+      {/* 3. CARDWISE CAFE GALLERY GRID SECTION */}
+      <CafeCardGallery items={filteredCafeGallery} activeCategory={activeCafeCategory} setActiveCategory={setActiveCafeCategory} onOpenLightbox={item => setSelectedLightboxImage(item)} onOpenOrderModal={openOrderModal} /> {/* Interactive Lightbox Motion Modal */}
       <AnimatePresence>
         {
           selectedLightboxImage && (<div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
@@ -760,6 +526,180 @@ export const About: React.FC = () => {
           </div>)
         }
       </AnimatePresence>
+
+
+
+
+
+      {/* 2. "SHOP BY CATEGORY" BENTO GRID SECTION */}
+      {/* <section className="relative w-full">
+        <div className="text-center mb-8 sm:mb-12">
+
+          <h2 className="font-sans font-extrabold text-3xl sm:text-4xl md:text-5xl text-[#1C1C1C] tracking-tight">
+            Shop By Category
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-5 sm:gap-6 relative">
+          <motion.div initial={{
+            opacity: 0,
+            y: 25
+          }} whileInView={{
+            opacity: 1,
+            y: 0
+          }} viewport={{
+            once: true
+          }} transition={{
+            duration: 0.5
+          }} className="md:col-span-8 bg-amber-800 rounded-[28px] sm:rounded-[36px] overflow-hidden p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl border border-black/20 group relative min-h-[300px]">
+            <div className="w-full sm:w-1/2 h-56 sm:h-full relative overflow-hidden rounded-2xl">
+              <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpT4MoVKnDvcXoZKGWWvmE69pLRcQ9pL6rMzcjbsdoNw&s=10" alt="Local Donuts & Coffee" className="w-full h-full object-cover rounded-2xl group-hover:scale-105 transition-transform duration-700 ease-out" />
+            </div>
+
+            <div className="w-full sm:w-1/2 text-white space-y-3 z-10">
+
+              <h3 className="font-sans font-extrabold text-2xl sm:text-3xl tracking-tight text-white leading-snug">
+                Fruit & Nut Goodness
+              </h3>
+              <p className="text-xs sm:text-sm text-gray-300 font-normal leading-relaxed">
+                Fruity flavours paired with our signature glaze-dipped signature pastries baked fresh daily.
+              </p>
+              <div className="pt-2">
+                <button type="button" onClick={() => navigate("/menu")} className="px-6 py-2.5 rounded-full bg-[#E88B2A] hover:bg-[#D4791E] text-white font-bold text-xs sm:text-sm transition-all shadow-md cursor-pointer transform hover:scale-105 inline-flex items-center gap-2">
+                  <span>Browse Shop</span>
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          </motion.div>
+
+          <motion.div initial={{
+            opacity: 0,
+            y: 25
+          }} whileInView={{
+            opacity: 1,
+            y: 0
+          }} viewport={{
+            once: true
+          }} transition={{
+            duration: 0.5,
+            delay: 0.1
+          }} className="md:col-span-4 bg-amber-300 rounded-[28px] sm:rounded-[36px] p-6 sm:p-8 flex flex-col items-center justify-center text-center shadow-md border border-[#E6DEC3]/60 group relative overflow-hidden min-h-[300px]">
+            <div className="relative z-10 space-y-2 flex flex-col items-center">
+              <div className="relative mb-2">
+                <img src="https://images.unsplash.com/photo-1576618148400-f54bed99fcfd?q=80&w=400&auto=format&fit=crop" alt="Homemade Cupcake" className="w-28 h-28 sm:w-32 sm:h-32 object-cover rounded-full border-4 border-white shadow-lg group-hover:scale-110 transition-transform duration-500" />
+                <span className="absolute -bottom-1 -right-1 bg-[#E88B2A] text-white text-[10px] font-serif italic px-2 py-0.5 rounded-full shadow-xs">
+                  Bakery Fresh
+                </span>
+              </div>
+              <h4 className="font-serif italic font-bold text-2xl text-white leading-tight">
+                home made cupcake
+              </h4>
+              <p className="text-xs text-white font-medium max-w-[200px]">
+                Fluffy Madagascar vanilla sponge topped with Belgian buttercream swirl.
+              </p>
+              <button type="button" onClick={() => navigate("/menu")} className="mt-3 text-xs font-extrabold text-[#E88B2A] hover:underline cursor-pointer">
+                Order Cupcake Boxes →
+              </button>
+            </div>
+          </motion.div>
+
+          <motion.div initial={{
+            opacity: 0,
+            y: 25
+          }} whileInView={{
+            opacity: 1,
+            y: 0
+          }} viewport={{
+            once: true
+          }} transition={{
+            duration: 0.5,
+            delay: 0.2
+          }} className="md:col-span-4 bg-amber-950 rounded-[28px] sm:rounded-[36px] p-6 sm:p-8 text-white flex flex-col justify-between shadow-xl border border-black/20 group relative overflow-hidden min-h-[380px]">
+            <div className="space-y-3 z-10">
+              
+              <h3 className="font-sans font-extrabold text-2xl sm:text-3xl tracking-tight text-white leading-tight">
+                Chocolate Cake
+              </h3>
+              <p className="text-xs text-gray-300 leading-relaxed">
+                Rich 70% dark cocoa layer cake topped with silken chocolate ganache and roasted hazelnuts.
+              </p>
+
+            </div>
+            <button type="button" onClick={() => navigate("/menu")} className="mt-3 text-xs font-extrabold text-white hover:underline cursor-pointer text-left">
+              Order Cupcake Boxes →
+            </button>
+            <div className="mt-6 relative h-40 w-full overflow-hidden rounded-2xl ">
+              <img src="https://images.unsplash.com/photo-1606313564200-e75d5e30476c?q=80&w=800&auto=format&fit=crop" alt="Chocolate Ganache & Cocoa" className="w-full h-full object-cover rounded-2xl group-hover:scale-105 transition-transform duration-700" />
+            </div>
+          </motion.div>
+
+
+          <motion.div initial={{
+            opacity: 0,
+            y: 25
+          }} whileInView={{
+            opacity: 1,
+            y: 0
+          }} viewport={{
+            once: true
+          }} transition={{
+            duration: 0.5,
+            delay: 0.3
+          }} className="md:col-span-4 bg-green-300 rounded-[28px] sm:rounded-[36px] p-6 sm:p-8 flex flex-col justify-between shadow-md border border-[#E6DEC3]/60 group relative overflow-hidden min-h-[340px]">
+            <div >
+
+              <h4 className="font-sans font-extrabold text-4xl text-white">
+                Macarons
+              </h4>
+              <p className="text-xs text-white mt-1">
+                French almond meringue shells filled with raspberry, pistachio & chocolate ganache.
+              </p>
+
+            </div>
+            <button type="button" onClick={() => navigate("/menu")} className="mt-3 text-xs font-extrabold text-white hover:underline cursor-pointer text-left">
+              Order Cupcake Boxes →
+            </button>
+            <div className="mt-1 relative h-44 w-full overflow-hidden rounded-2xl">
+              <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDbLtLMeLg27grCqApfPd7Wpt-JVUaq5NmTKNaBD4n7g&s=10" />
+            </div>
+          </motion.div>
+
+
+          <motion.div initial={{
+            opacity: 0,
+            y: 25
+          }} whileInView={{
+            opacity: 1,
+            y: 0
+          }} viewport={{
+            once: true
+          }} transition={{
+            duration: 0.5,
+            delay: 0.4
+          }} className="md:col-span-4 bg-amber-500 rounded-[28px] sm:rounded-[36px] p-6 sm:p-8 flex flex-col justify-between shadow-lg border border-gray-100 group relative overflow-hidden min-h-[340px]">
+            <div>
+
+              <h4 className="font-sans font-extrabold text-3xl text-white">
+                Choco Croissant
+              </h4>
+              <p className="text-xs text-white mt-1">
+                Flaky butter croissants filled with dark chocolate ganache and amarena cherry glaze.
+              </p>
+
+            </div>
+            <button type="button" onClick={() => navigate("/menu")} className="mt-3 text-xs font-extrabold text-white hover:underline cursor-pointer text-left">
+              Order Cupcake Boxes →
+            </button>
+            <div className="mt-4 relative h-44 w-full overflow-hidden rounded-2xl">
+              <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6SpNGWq1Cv_-v-Dvmd4x8RXxUyUUkL_dU0DlWMerLtQ&s=10" alt="Choco Cherry Croissants" className="w-full h-full object-cover rounded-2xl group-hover:scale-105 transition-transform duration-500" />
+            </div>
+          </motion.div>
+        </div>
+      </section> */}
+
+
+
 
 
 

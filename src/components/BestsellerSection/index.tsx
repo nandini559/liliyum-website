@@ -10,7 +10,7 @@ export const BestsellerSection: React.FC = () => {
 
   return (
     <div className="px-2">
-      <section className="py-16 sm:py-24 bg-amber-200 text-amber-950 w-full max-w-full overflow-hidden select-none rounded-3xl px-10">
+      <section className="py-16 sm:py-24 bg-amber-100 text-amber-950 w-full max-w-full overflow-hidden select-none rounded-3xl px-10">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           {/* Main Section Header */}
           <h2 className="font-serif text-4xl sm:text-5xl md:text-6xl font-black text-amber-950 tracking-tight text-center mb-4">

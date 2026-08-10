@@ -286,7 +286,7 @@ export const OrderModal: React.FC = () => {
               {/* Product Selector Dropdown if changing cake */}
               <div>
                 <label className="text-xs font-bold uppercase tracking-wider text-[#A8644A] block mb-1.5 flex items-center justify-between">
-                  <span>Selected Your Favourite:</span>
+                  <span>Selecte Your Cake:</span>
                   {/* <span className="text-[11px] text-[#7A6760] font-normal">Switch cake anytime</span> */}
                 </label>
                 <select

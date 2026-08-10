@@ -74,7 +74,7 @@ export const SocialProof: React.FC = () => {
   const marqueeItems = [...reviews, ...reviews];
 
   return (
-    <section className="py-20 sm:py-28 bg-[#FDE7DA] text-[#3B2C27] w-full max-w-full overflow-hidden select-none relative">
+    <section className="py-20 sm:py-28 bg-amber-100 text-[#3B2C27] w-full max-w-full overflow-hidden select-none relative">
       {/* Section Header */}
       <div className="text-center max-w-3xl mx-auto mb-16 sm:mb-20 px-4">
         <h2 className="font-serif text-4xl sm:text-5xl md:text-6xl font-black text-[#3B1C10] tracking-tight text-center mb-8">
