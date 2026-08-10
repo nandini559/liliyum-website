@@ -1,24 +1,18 @@
-import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import React, {useState} from "react";
+import {motion, AnimatePresence} from "framer-motion";
 import {
   ShieldCheck,
   Award,
   Truck,
   Heart,
-  Sparkles,
-  ChevronLeft,
-  ChevronRight,
   X,
-  ZoomIn,
   MapPin,
   Clock,
   ArrowUpRight,
-  Plus,
-  Check,
   Utensils
 } from "lucide-react";
-import { useOrderModal } from "../context/OrderModalContext";
-import { useNavigate } from "react-router-dom";
+import {useOrderModal} from "../context/OrderModalContext";
+import {useNavigate} from "react-router-dom";
 
 interface CafeGalleryItem {
   id: string;
@@ -33,28 +27,27 @@ interface CafeGalleryItem {
 /* -------------------------------------------------------------------------- */
 /* CARDWISE CAFE GALLERY GRID COMPONENT */
 /* -------------------------------------------------------------------------- */
-const CafeCardGallery: React.FC<{
+const CafeCardGallery: React.FC < {
   items: CafeGalleryItem[];
   activeCategory: string;
-  setActiveCategory: (cat: string) => void;
-  onOpenLightbox: (item: CafeGalleryItem) => void;
-  onOpenOrderModal: () => void;
-}> = ({ items, activeCategory, setActiveCategory, onOpenLightbox, onOpenOrderModal }) => {
-  const categories = ["All Ambience", "Barista & Coffee", "Artisan Kitchen", "Patisserie Display", "Cozy Patio"];
+  // setActiveCategory: (cat: string) => void;
+  // onOpenLightbox: (item: CafeGalleryItem) => void;
+  // onOpenOrderModal: () => void;
+} > = ({items, activeCategory}) => {
+  // const categories = ["All Ambience", "Barista & Coffee", "Artisan Kitchen", "Patisserie Display", "Cozy Patio"];
   const navigate = useNavigate();
 
-  return (
-    <section className="bg-amber-200 rounded-[36px] p-6 sm:p-10 border border-white/80 shadow-xl relative overflow-hidden">
-      {/* Header Controls & Filter Tabs */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 mb-8">
-        <div>
-          <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#2B1B17] text-center">
-            Liliyum Cafe & Gallery
-          </h2>
-        </div>
+  return (<section className="bg-amber-200 rounded-[36px] p-6 sm:p-10 border border-white/80 shadow-xl relative overflow-hidden">
+    {/* Header Controls & Filter Tabs */}
+    <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 mb-8">
+      <div>
+        <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#2B1B17] text-center">
+          Liliyum Cafe & Gallery
+        </h2>
+      </div>
 
-        {/* Category Filters */}
-        {/* <div className="flex items-center gap-2 overflow-x-auto pb-2 no-scrollbar">
+      {/* Category Filters */}
+      {/* <div className="flex items-center gap-2 overflow-x-auto pb-2 no-scrollbar">
           {categories.map((cat) => (
             <button
               key={cat}
@@ -69,105 +62,102 @@ const CafeCardGallery: React.FC<{
               {cat}
             </button>
           ))}
-        </div> */}
-      </div>
+        </div> */
+      }
+    </div>
 
-      {/* Cards Grid */}
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={activeCategory}
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -15 }}
-          transition={{ duration: 0.3 }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8"
-        >
-          {items.map((item, index) => (
-            <motion.div
-              key={item.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: index * 0.05 }}
-              className="bg-[#FAF7F5] rounded-3xl p-5 sm:p-6 border border-[#E7D6CB] shadow-lg flex flex-col justify-between group hover:shadow-xl transition-all duration-300"
-            >
-              <div>
-                {/* Image Section */}
-                <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-md bg-black mb-4 border border-white/40">
-                  <img
-                    src={item.image}
-                    alt={item.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-                  />
-                  {/* Badges */}
-                  <div className="absolute top-3 left-3 right-3 flex items-center justify-between pointer-events-none gap-2">
-                    {/* <span className="bg-black/70 backdrop-blur-md text-white font-extrabold text-[10px] uppercase tracking-wider px-2.5 py-1 rounded-full border border-white/20 shadow-sm truncate">
+    {/* Cards Grid */}
+    <AnimatePresence mode="wait">
+      <motion.div key={activeCategory} initial={{
+          opacity: 0,
+          y: 15
+        }} animate={{
+          opacity: 1,
+          y: 0
+        }} exit={{
+          opacity: 0,
+          y: -15
+        }} transition={{
+          duration: 0.3
+        }} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+        {
+          items.map((item, index) => (<motion.div key={item.id} initial={{
+              opacity: 0,
+              y: 20
+            }} animate={{
+              opacity: 1,
+              y: 0
+            }} transition={{
+              duration: 0.4,
+              delay: index * 0.05
+            }} className="bg-[#FAF7F5] rounded-3xl p-5 sm:p-6 border border-[#E7D6CB] shadow-lg flex flex-col justify-between group hover:shadow-xl transition-all duration-300">
+            <div>
+              {/* Image Section */}
+              <div className="relative aspect-4/3 rounded-2xl overflow-hidden shadow-md bg-black mb-4 border border-white/40">
+                <img src={item.image} alt={item.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"/>{" "}
+                {/* Badges */}
+                <div className="absolute top-3 left-3 right-3 flex items-center justify-between pointer-events-none gap-2">
+                  {/* <span className="bg-black/70 backdrop-blur-md text-white font-extrabold text-[10px] uppercase tracking-wider px-2.5 py-1 rounded-full border border-white/20 shadow-sm truncate">
                       {item.badge}
-                    </span> */}
-                    <span className="bg-white/95 backdrop-blur-md text-[#2B1B17] font-bold text-[10px] px-2.5 py-1 rounded-full flex items-center gap-1 shadow-sm shrink-0">
-                      <MapPin className="w-3.5 h-3.5 text-[#E88B2A]" />
-                      {item.location}
-                    </span>
-                  </div>
-
-                  {/* Lightbox Enlarge Trigger */}
-                  {/* <button
+                    </span> */
+                  }
+                  <span className="bg-white/95 backdrop-blur-md text-[#2B1B17] font-bold text-[10px] px-2.5 py-1 rounded-full flex items-center gap-1 shadow-sm shrink-0">
+                    <MapPin className="w-3.5 h-3.5 text-[#E88B2A]"/>{" "}
+                    {item.location}
+                  </span>
+                </div>
+                {/* Lightbox Enlarge Trigger */}
+                {/* <button
                     type="button"
                     onClick={() => onOpenLightbox(item)}
                     className="absolute bottom-3 right-3 bg-white/90 hover:bg-white text-[#2B1B17] p-2 sm:px-3 sm:py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-md transition-all transform hover:scale-105 cursor-pointer z-10"
                   >
                     <ZoomIn className="w-3.5 h-3.5 text-[#E88B2A]" />
                     <span className="hidden sm:inline">Enlarge</span>
-                  </button> */}
-                </div>
+                  </button> */
+                }
+              </div>
 
-                {/* Info Section */}
-                <div className="space-y-2">
-                  {/* <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-widest text-[#E88B2A] bg-[#FFF0E2] px-2.5 py-0.5 rounded-full border border-[#FAD6B5] inline-block">
+              {/* Info Section */}
+              <div className="space-y-2">
+                {/* <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-widest text-[#E88B2A] bg-[#FFF0E2] px-2.5 py-0.5 rounded-full border border-[#FAD6B5] inline-block">
                     {item.category}
-                  </span> */}
+                  </span> */
+                }
 
-                  <h3 className="font-serif font-extrabold text-lg sm:text-xl text-[#2B1B17] leading-snug line-clamp-2">
-                    {item.title}
-                  </h3>
+                <h3 className="font-serif font-extrabold text-lg sm:text-xl text-[#2B1B17] leading-snug line-clamp-2">
+                  {item.title}
+                </h3>
 
-                  <p className="text-xs sm:text-sm text-[#6E554C] font-medium leading-relaxed">
-                    {item.desc}
-                  </p>
-                </div>
+                <p className="text-xs sm:text-sm text-[#6E554C] font-medium leading-relaxed">
+                  {item.desc}
+                </p>
               </div>
+            </div>
 
-              {/* Action Buttons */}
-              <div className="pt-4 mt-4 border-t border-[#E7D6CB]/60 flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => navigate("/menu")}
-                  className="flex-1 py-2.5 px-3 rounded-full bg-[#E88B2A] hover:bg-[#D4791E] text-white font-bold text-xs shadow-sm transition-all cursor-pointer flex items-center justify-center gap-1.5 transform hover:scale-[1.02]"
-                >
-                  <span>Experience Cafe</span>
-                  <ArrowUpRight className="w-3.5 h-3.5" />
-                </button>
+            {/* Action Buttons */}
+            <div className="pt-4 mt-4 border-t border-[#E7D6CB]/60 flex items-center gap-2">
+              <button type="button" onClick={() => navigate("/menu")} className="flex-1 py-2.5 px-3 rounded-full bg-[#E88B2A] hover:bg-[#D4791E] text-white font-bold text-xs shadow-sm transition-all cursor-pointer flex items-center justify-center gap-1.5 transform hover:scale-[1.02]">
+                <span>Experience Cafe</span>
+                <ArrowUpRight className="w-3.5 h-3.5"/>
+              </button>
 
-                <button
-                  type="button"
-                  onClick={() => navigate("/")}
-                  className="py-2.5 px-3 rounded-full bg-white hover:bg-gray-50 text-[#2B1B17] border border-[#E7D6CB] font-bold text-xs transition-colors cursor-pointer whitespace-nowrap"
-                >
-                  Details
-                </button>
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
-      </AnimatePresence>
-    </section >
-  );
+              <button type="button" onClick={() => navigate("/")} className="py-2.5 px-3 rounded-full bg-white hover:bg-gray-50 text-[#2B1B17] border border-[#E7D6CB] font-bold text-xs transition-colors cursor-pointer whitespace-nowrap">
+                Details
+              </button>
+            </div>
+          </motion.div>))
+        }
+      </motion.div>
+    </AnimatePresence>
+  </section>);
 };
 
 /* -------------------------------------------------------------------------- */
 /* MAIN ABOUT PAGE COMPONENT */
 /* -------------------------------------------------------------------------- */
 export const About: React.FC = () => {
-  const { openOrderModal } = useOrderModal();
+  const {openOrderModal} = useOrderModal();
 
   // Cafe Motion Gallery Data
   const cafeGalleryItems: CafeGalleryItem[] = [
@@ -223,7 +213,7 @@ export const About: React.FC = () => {
   ];
 
   const [activeCafeCategory, setActiveCafeCategory] = useState<string>("All Ambience");
-  const [selectedLightboxImage, setSelectedLightboxImage] = useState<CafeGalleryItem | null>(null);
+  const [selectedLightboxImage, setSelectedLightboxImage] = useState < CafeGalleryItem | null > (null);
 
   const filteredCafeGallery = activeCafeCategory === "All Ambience"
     ? cafeGalleryItems
@@ -278,68 +268,26 @@ export const About: React.FC = () => {
 
   const selectedGallery = filteredGallery[activeGalleryIndex] || filteredGallery[0] || galleryItems[0];
 
-  const upsellItems = [
-    {
-      id: "u1",
-      name: "Luxury Handcrafted Golden Candles (Set of 6)",
-      price: 4,
-      image: "https://images.unsplash.com/photo-1587314168485-3236d6710814?q=80&w=300&auto=format&fit=crop",
-      desc: "Slim metallic gold drip-free birthday candles."
-    }, {
-      id: "u2",
-      name: "Sparkler Birthday Fountain (Pack of 2)",
-      price: 3,
-      image: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=300&auto=format&fit=crop",
-      desc: "Smokeless indoor celebration sparkling fountains."
-    }, {
-      id: "u3",
-      name: "Assorted Belgian Truffle Box (4 Pcs)",
-      price: 8,
-      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTK8ZSkXb9FutBU6JOjzI0SF2r7yVjDSnBAB7AMEeEdPQ&s=10",
-      desc: "Luxury mini sampler box with hazelnut pralines."
-    }, {
-      id: "u4",
-      name: "Foil-Stamped Premium Greeting Card",
-      price: 2,
-      image: "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?q=80&w=300&auto=format&fit=crop",
-      desc: "Hand-lettered card with custom handwritten note inside."
-    }
-  ];
-
-  const [selectedUpsells, setSelectedUpsells] = useState<string[]>(["u1"]);
-  const navigate = useNavigate();
-
-  const toggleUpsell = (id: string) => {
-    if (selectedUpsells.includes(id)) {
-      setSelectedUpsells(selectedUpsells.filter((item) => item !== id));
-    } else {
-      setSelectedUpsells([
-        ...selectedUpsells,
-        id
-      ]);
-    }
-  };
-
-  return (<main className="py-8 sm:py-16 min-h-screen w-full max-w-full overflow-x-hidden relative select-none mt-16 sm:mt-20 bg-gradient-to-br from-[#FFE8EF] via-[#FFF4E3] to-[#E4F5EE]">
+  return (<main className="py-8 sm:py-16 min-h-screen w-full max-w-full overflow-x-hidden relative select-none mt-16 sm:mt-20 bg-linear-to-br from-[#FFE8EF] via-[#FFF4E3] to-[#E4F5EE]">
     {/* Background Decor */}
     <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden opacity-60">
-      <div className="absolute top-10 left-[8%] w-4 h-4 rounded-full bg-[#F45B82]/30 animate-pulse" />
-      <div className="absolute top-32 right-[12%] w-3 h-5 rounded-sm bg-[#75DEC0]/40 rotate-12" />
-      <div className="absolute top-96 left-[15%] w-4 h-4 rounded-full bg-[#FFD363]/50" />
+      <div className="absolute top-10 left-[8%] w-4 h-4 rounded-full bg-[#F45B82]/30 animate-pulse"/>
+      <div className="absolute top-32 right-[12%] w-3 h-5 rounded-sm bg-[#75DEC0]/40 rotate-12"/>
+      <div className="absolute top-96 left-[15%] w-4 h-4 rounded-full bg-[#FFD363]/50"/>
     </div>
 
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10 space-y-16 sm:space-y-24">
       {/* 1. HERO / ABOUT STORY SECTION */}
       <section className="text-center max-w-4xl mx-auto pt-4">
         <motion.div initial={{
-          opacity: 0,
-          y: 20
-        }} animate={{
-          opacity: 1,
-          y: 0
-        }} transition={{
-          duration: 0.6
-        }}>
+            opacity: 0,
+            y: 20
+          }} animate={{
+            opacity: 1,
+            y: 0
+          }} transition={{
+            duration: 0.6
+          }}>
           {/* <span className="text-xs font-serif font-bold italic tracking-widest uppercase text-[#E07A2E] bg-[#FFF0E2] px-4 py-1.5 rounded-full border border-[#FAD6B5] inline-block mb-3">
               Established 2018 • Bangalore
             </span> */
@@ -353,7 +301,7 @@ export const About: React.FC = () => {
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 mt-10 text-left">
             <div className="bg-blue-100 p-5 rounded-3xl border border-white/60 shadow-sm flex flex-col items-center text-center hover:shadow-md transition-shadow">
-              <ShieldCheck className="w-8 h-8 text-pink-500 mb-2" />
+              <ShieldCheck className="w-8 h-8 text-pink-500 mb-2"/>
               <h4 className="font-serif font-extrabold text-[#2B1B17] text-base">
                 100% Fresh Daily
               </h4>
@@ -362,7 +310,7 @@ export const About: React.FC = () => {
               </p>
             </div>
             <div className="bg-pink-200 p-5 rounded-3xl border border-white/60 shadow-sm flex flex-col items-center text-center hover:shadow-md transition-shadow">
-              <Award className="w-8 h-8 text-blue-300 mb-2" />
+              <Award className="w-8 h-8 text-blue-300 mb-2"/>
               <h4 className="font-serif font-extrabold text-[#2B1B17] text-base">
                 Belgian Cocoa
               </h4>
@@ -371,7 +319,7 @@ export const About: React.FC = () => {
               </p>
             </div>
             <div className="bg-yellow-200 p-5 rounded-3xl  border-white/60 shadow-sm flex flex-col items-center text-center hover:shadow-md transition-shadow">
-              <Truck className="w-8 h-8 text-[#F45B82] mb-2" />
+              <Truck className="w-8 h-8 text-[#F45B82] mb-2"/>
               <h4 className="font-serif font-extrabold text-[#2B1B17] text-base">
                 Same-Day Slots
               </h4>
@@ -380,7 +328,7 @@ export const About: React.FC = () => {
               </p>
             </div>
             <div className="bg-green-200 p-5 rounded-3xl border border-white/60 shadow-sm flex flex-col items-center text-center hover:shadow-md transition-shadow">
-              <Heart className="w-8 h-8 text-rose-500 mb-2" />
+              <Heart className="w-8 h-8 text-rose-500 mb-2"/>
               <h4 className="font-serif font-extrabold text-[#2B1B17] text-base">
                 Custom Made
               </h4>
@@ -391,8 +339,6 @@ export const About: React.FC = () => {
           </div>
         </motion.div>
       </section>
-
-
       {/* 4. GENERAL CAKE GALLERY SHOWCASE SECTION */}
       <section className="bg-amber-200 rounded-[36px] p-6 sm:p-10 border border-white/80 shadow-lg">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
@@ -404,11 +350,12 @@ export const About: React.FC = () => {
           <div className="flex items-center gap-2 overflow-x-auto pb-2 no-scrollbar">
             {
               ["All", "Signature", "Celebration", "Cheesecakes", "Luxury"].map((cat) => (<button key={cat} onClick={() => {
-                setActiveCategoryFilter(cat);
-                setActiveGalleryIndex(0);
-              }} className={`px-4 py-1.5 rounded-full text-xs font-extrabold transition-all cursor-pointer ${activeCategoryFilter === cat
-                ? "bg-[#1C1C1C] text-white shadow-md"
-                : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`}>
+                  setActiveCategoryFilter(cat);
+                  setActiveGalleryIndex(0);
+                }} className={`px-4 py-1.5 rounded-full text-xs font-extrabold transition-all cursor-pointer ${
+                activeCategoryFilter === cat
+                  ? "bg-[#1C1C1C] text-white shadow-md"
+                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`}>
                 {cat}
               </button>))
             }
@@ -416,12 +363,12 @@ export const About: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-          <div className="lg:col-span-7 relative aspect-[4/3] rounded-3xl overflow-hidden shadow-md bg-black">
-            <img src={selectedGallery.image} alt={selectedGallery.title} className="w-full h-full object-cover transition-transform duration-700 hover:scale-[1.02]" />
+          <div className="lg:col-span-7 relative aspect-4/3 rounded-3xl overflow-hidden shadow-md bg-black">
+            <img src={selectedGallery.image} alt={selectedGallery.title} className="w-full h-full object-cover transition-transform duration-700 hover:scale-[1.02]"/>
             <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-md px-3.5 py-1 rounded-full text-xs font-black text-[#2B1B17] uppercase tracking-wider shadow-sm">
               {selectedGallery.badge}
             </div>
-            <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent p-6 text-white">
+            <div className="absolute bottom-0 inset-x-0 bg-linear-to-t from-black/90 via-black/40 to-transparent p-6 text-white">
               <h3 className="font-serif text-2xl font-bold mb-1">
                 {selectedGallery.title}
               </h3>
@@ -436,12 +383,13 @@ export const About: React.FC = () => {
               Select Creation ({filteredGallery.length}
               Items):
             </h4>
-            <div className="grid grid-cols-1 gap-3 max-h-[360px] overflow-y-auto pr-1 no-scrollbar">
+            <div className="grid grid-cols-1 gap-3 max-h-90 overflow-y-auto pr-1 no-scrollbar">
               {
-                filteredGallery.map((item, idx) => (<button key={item.id} onClick={() => setActiveGalleryIndex(idx)} className={`flex items-center gap-4 p-3 rounded-2xl border text-left transition-all cursor-pointer ${activeGalleryIndex === idx
-                  ? "bg-[#FFE8EF] border-[#F45B82] shadow-sm"
-                  : "bg-white hover:bg-gray-50 border-gray-100"}`}>
-                  <img src={item.image} alt={item.title} className="w-16 h-16 rounded-xl object-cover shrink-0" />
+                filteredGallery.map((item, idx) => (<button key={item.id} onClick={() => setActiveGalleryIndex(idx)} className={`flex items-center gap-4 p-3 rounded-2xl border text-left transition-all cursor-pointer ${
+                  activeGalleryIndex === idx
+                    ? "bg-[#FFE8EF] border-[#F45B82] shadow-sm"
+                    : "bg-white hover:bg-gray-50 border-gray-100"}`}>
+                  <img src={item.image} alt={item.title} className="w-16 h-16 rounded-xl object-cover shrink-0"/>
                   <div>
                     <span className="text-[10px] font-bold uppercase tracking-wider text-[#F45B82] block">
                       {item.category}
@@ -459,30 +407,28 @@ export const About: React.FC = () => {
           </div>
         </div>
       </section>
-
-
-
       {/* 3. CARDWISE CAFE GALLERY GRID SECTION */}
-      <CafeCardGallery items={filteredCafeGallery} activeCategory={activeCafeCategory} setActiveCategory={setActiveCafeCategory} onOpenLightbox={item => setSelectedLightboxImage(item)} onOpenOrderModal={openOrderModal} /> {/* Interactive Lightbox Motion Modal */}
+      <CafeCardGallery items={filteredCafeGallery} activeCategory={activeCafeCategory}/>{" "}
+      {/* Interactive Lightbox Motion Modal */}
       <AnimatePresence>
         {
           selectedLightboxImage && (<div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
             <motion.div initial={{
-              opacity: 0,
-              scale: 0.9
-            }} animate={{
-              opacity: 1,
-              scale: 1
-            }} exit={{
-              opacity: 0,
-              scale: 0.9
-            }} className="bg-[#FAF7F5] rounded-3xl max-w-3xl w-full overflow-hidden shadow-2xl relative border border-white/20 text-[#2B1B17]">
+                opacity: 0,
+                scale: 0.9
+              }} animate={{
+                opacity: 1,
+                scale: 1
+              }} exit={{
+                opacity: 0,
+                scale: 0.9
+              }} className="bg-[#FAF7F5] rounded-3xl max-w-3xl w-full overflow-hidden shadow-2xl relative border border-white/20 text-[#2B1B17]">
               <button type="button" onClick={() => setSelectedLightboxImage(null)} className="absolute top-4 right-4 z-20 w-10 h-10 rounded-full bg-black/60 hover:bg-black text-white flex items-center justify-center transition-colors cursor-pointer">
-                <X className="w-5 h-5" />
+                <X className="w-5 h-5"/>
               </button>
 
-              <div className="relative aspect-[16/9] bg-black">
-                <img src={selectedLightboxImage.image} alt={selectedLightboxImage.title} className="w-full h-full object-cover" />
+              <div className="relative  bg-black">
+                <img src={selectedLightboxImage.image} alt={selectedLightboxImage.title} className="w-full h-full object-cover"/>
                 <div className="absolute top-4 left-4 bg-black/70 backdrop-blur-md text-white font-bold text-xs uppercase px-3 py-1 rounded-full">
                   {selectedLightboxImage.badge}
                 </div>
@@ -491,12 +437,11 @@ export const About: React.FC = () => {
               <div className="p-6 space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-bold uppercase tracking-wider text-[#E88B2A]">
-                    {selectedLightboxImage.category}
-                    •{" "}
+                    {selectedLightboxImage.category}•{" "}
                     {selectedLightboxImage.location}
                   </span>
                   <span className="text-xs text-gray-500 flex items-center gap-1">
-                    <Clock className="w-3.5 h-3.5 text-[#E88B2A]" />
+                    <Clock className="w-3.5 h-3.5 text-[#E88B2A]"/>
                     Open Daily 8:00 AM - 11:00 PM
                   </span>
                 </div>
@@ -510,14 +455,14 @@ export const About: React.FC = () => {
 
                 <div className="pt-4 border-t border-[#E7D6CB] flex flex-wrap items-center justify-between gap-3">
                   <div className="flex items-center gap-2 text-xs font-semibold text-emerald-800 bg-emerald-50 px-3 py-1.5 rounded-xl">
-                    <Utensils className="w-4 h-4 text-emerald-600" />
+                    <Utensils className="w-4 h-4 text-emerald-600"/>
                     Fresh Artisan Patisserie Served Hourly
                   </div>
 
                   <button type="button" onClick={() => {
-                    setSelectedLightboxImage(null);
-                    openOrderModal();
-                  }} className="px-6 py-2.5 rounded-full bg-[#E88B2A] hover:bg-[#D4791E] text-white font-bold text-xs shadow-md transition-all cursor-pointer">
+                      setSelectedLightboxImage(null);
+                      openOrderModal();
+                    }} className="px-6 py-2.5 rounded-full bg-[#E88B2A] hover:bg-[#D4791E] text-white font-bold text-xs shadow-md transition-all cursor-pointer">
                     Place Quick Cafe Order →
                   </button>
                 </div>
@@ -526,11 +471,6 @@ export const About: React.FC = () => {
           </div>)
         }
       </AnimatePresence>
-
-
-
-
-
       {/* 2. "SHOP BY CATEGORY" BENTO GRID SECTION */}
       {/* <section className="relative w-full">
         <div className="text-center mb-8 sm:mb-12">
@@ -617,7 +557,7 @@ export const About: React.FC = () => {
             delay: 0.2
           }} className="md:col-span-4 bg-amber-950 rounded-[28px] sm:rounded-[36px] p-6 sm:p-8 text-white flex flex-col justify-between shadow-xl border border-black/20 group relative overflow-hidden min-h-[380px]">
             <div className="space-y-3 z-10">
-              
+
               <h3 className="font-sans font-extrabold text-2xl sm:text-3xl tracking-tight text-white leading-tight">
                 Chocolate Cake
               </h3>
@@ -696,13 +636,8 @@ export const About: React.FC = () => {
             </div>
           </motion.div>
         </div>
-      </section> */}
-
-
-
-
-
-
+      </section> */
+      }
       {/* 5. UPSELLS & CELEBRATION ADD-ONS SECTION */}
       {/* <section className="bg-white/90 rounded-[36px] p-6 sm:p-10 border border-white/80 shadow-lg">
         <div className="max-w-3xl mb-8">
@@ -752,7 +687,8 @@ export const About: React.FC = () => {
             })
           }
         </div>
-      </section> */}
+      </section> */
+      }
     </div>
   </main>);
 };
