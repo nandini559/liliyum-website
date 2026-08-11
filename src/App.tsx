@@ -15,7 +15,7 @@ export const App: React.FC = () => {
     <Router>
       <div className="min-h-screen flex flex-col bg-[#FAF7F5] text-[#2D2422] font-sans antialiased w-full max-w-full overflow-x-hidden relative">
         <Navbar/>
-        <div className="flex-grow">
+        <div className="grow">
           <Routes>
             <Route path="/" element={<Home />}/>
             <Route path="/menu" element={<Collection />}/>
